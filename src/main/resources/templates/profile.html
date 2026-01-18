@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | GSB System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --pink: #eb008b; --bg: #f1f5f9; --card: #fff; --txt: #1e293b; --muted: #64748b; }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --txt: #f8fafc; --muted: #94a3b8; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--txt); }
+        
+        /* Navbar & Container */
+        nav { background: var(--card); padding: 15px 5%; border-bottom: 3px solid var(--pink); display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 800px; margin: 25px auto; padding: 0 15px; }
+
+        /* Card Styles */
+        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        .profile-header { display: flex; align-items: center; gap: 20px; }
+        .avatar-wrapper { position: relative; width: 100px; height: 100px; }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--pink); object-fit: cover; }
+        .up-btn { position: absolute; bottom: 0; right: 0; background: var(--pink); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--card); }
+
+        /* Stats & Form */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .stat { text-align: center; }
+        .stat b { display: block; font-size: 1.3rem; color: var(--pink); }
+        .stat span { font-size: 0.75rem; color: var(--muted); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 5px; color: var(--muted); }
+        input { width: 100%; padding: 10px; border: 1px solid var(--muted); border-radius: 8px; background: var(--bg); color: var(--txt); outline: none; }
+        input:focus { border-color: var(--pink); }
+        
+        .btn { width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--pink); color: #fff; font-weight: 700; cursor: pointer; margin-top: 15px; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/}" style="text-decoration: none; color: var(--txt); font-weight: 700;"><i class="fa fa-arrow-left"></i> กลับ</a>
+    <div onclick="toggleTheme()" style="cursor: pointer; color: var(--pink);"><i class="fa-solid fa-circle-half-stroke"></i> THEME</div>
+</nav>
+
+<div class="container">
+    <div class="card profile-header">
+        <div class="avatar-wrapper">
+            <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" id="preview" class="avatar-img">
+            <label for="f" class="up-btn"><i class="fa fa-camera"></i></label>
+            <input type="file" id="f" hidden onchange="handleImg(this)">
+        </div>
+        <div>
+            <h1 th:text="${user.name}">User Name</h1>
+            <p style="color: var(--muted); font-size: 0.85rem;"><i class="fa-solid fa-user-shield"></i> ผู้ดูแลระบบ (Admin)</p>
+        </div>
+    </div>
+
+    <div class="card stats">
+        <div class="stat"><b th:text="${customers.size()}">0</b><span>ลูกค้า</span></div>
+        <div class="stat"><b style="color: #10b981;">Active</b><span>สถานะ</span></div>
+        <div class="stat"><b th:text="${#dates.format(#dates.createNow(), 'dd/MM/yy')}"></b><span>ล็อคอิน</span></div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 15px; font-size: 1rem;"><i class="fa fa-lock" style="color: var(--pink);"></i> ความปลอดภัย</h3>
+        <form th:action="@{/user/update-password}" method="post" onsubmit="return val()">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>รหัสผ่านเดิม</label>
+                <input type="password" name="oldPassword" required>
+            </div>
+            <div class="grid">
+                <div><label>รหัสใหม่</label><input type="password" id="n" name="newPassword" required></div>
+                <div><label>ยืนยันรหัสใหม่</label><input type="password" id="c" required></div>
+            </div>
+            <button type="submit" class="btn">อัปเดตรหัสผ่าน</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const toggleTheme = () => {
+        const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('theme', t);
+    };
+    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
+    function handleImg(i) {
+        if (i.files && i.files[0]) {
+            let r = new FileReader();
+            r.onload = (e) => document.getElementById('preview').src = e.target.result;
+            r.readAsDataURL(i.files[0]);
+        }
+    }
+    function val() {
+        if(document.getElementById('n').value !== document.getElementById('c').value) {
+            alert('รหัสผ่านไม่ตรงกัน!'); return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

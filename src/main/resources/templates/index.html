@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | GSB Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gsb-pink: #eb008b; --bg-body: #f4f7fa; --bg-nav: #ffffff; --bg-card: #ffffff;
+            --text-main: #1a202c; --text-muted: #718096; --border-color: #edf2f7; --row-hover: #fff5f7;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a; --bg-nav: #1e293b; --bg-card: #1e293b;
+            --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #334155; --row-hover: #25182a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.2s; }
+        body { font-family: 'Sarabun', sans-serif; background: var(--bg-body); color: var(--text-main); }
+
+        nav { 
+            background: var(--bg-nav); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 4px solid var(--gsb-pink); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Dark Mode Switch */
+        .theme-switch-wrapper { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
+        .theme-switch { display: inline-block; height: 24px; position: relative; width: 45px; }
+        .theme-switch input { display:none; }
+        .slider { background-color: #cbd5e0; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: #fff; bottom: 3px; content: ""; height: 18px; left: 4px; position: absolute; transition: .4s; width: 18px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--gsb-pink); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .container { max-width: 1240px; margin: 2rem auto; padding: 0 1.5rem; }
+        .toolbar { display: flex; justify-content: space-between; margin-bottom: 2rem; align-items: center; gap: 20px; }
+        
+        .search-container { position: relative; flex: 1; max-width: 450px; }
+        .search-container i { position: absolute; left: 18px; top: 14px; color: var(--gsb-pink); }
+        .search-container input { 
+            width: 100%; padding: 12px 20px 12px 50px; border-radius: 15px; border: 2px solid var(--border-color);
+            background: var(--bg-card); color: var(--text-main); outline: none; font-size: 1rem; font-weight: 600;
+        }
+
+        /* Table Design */
+        .data-table { width: 100%; background: var(--bg-card); border-radius: 20px; border-collapse: separate; border-spacing: 0; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .data-table th { background: var(--gsb-pink); color: white; padding: 18px; text-align: left; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; }
+        .data-table td { padding: 18px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .data-table tr:hover { background: var(--row-hover); }
+
+        /* การเน้น Font */
+        .name-highlight { font-weight: 800; font-size: 1.1rem; color: var(--gsb-pink); margin-bottom: 4px; }
+        .info-muted { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+        
+        .tag { padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; display: inline-block; margin-top: 5px; }
+        .tag-edu { background: rgba(0, 150, 255, 0.1); color: #0077cc; }
+        .tag-major { background: rgba(235, 0, 139, 0.1); color: var(--gsb-pink); margin-left: 5px; }
+
+        .btn-pink { background: var(--gsb-pink); color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        
+        .action-btns { display: flex; gap: 15px; justify-content: center; }
+        .btn-edit { color: var(--text-muted); font-size: 1.2rem; }
+        .btn-edit:hover { color: var(--gsb-pink); transform: scale(1.1); }
+        .btn-del { color: #f87171; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">GSB <span style="color: var(--gsb-pink);">PORTAL</span></div>
+    <div style="display: flex; align-items: center;">
+        <div class="theme-switch-wrapper">
+            <i class="fa-solid fa-sun" style="color: #facc15;"></i>
+            <label class="theme-switch"><input type="checkbox" id="checkbox" /><div class="slider"></div></label>
+            <i class="fa-solid fa-moon" style="color: #94a3b8;"></i>
+        </div>
+        <a th:href="@{/profile}" class="user-nav" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700;">
+            <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" style="width: 35px; border-radius: 50%; border: 2px solid var(--gsb-pink);">
+            <span th:text="${user.name}">User</span>
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="toolbar">
+        <div class="search-container">
+            <i class="fa fa-search"></i>
+            <input type="text" id="q" onkeyup="search()" placeholder="ค้นหาข้อมูลลูกค้า...">
+        </div>
+        <a th:href="@{/customers/add}" class="btn-pink"><i class="fa-solid fa-user-plus"></i> เพิ่มลูกค้า</a>
+    </div>
+
+    <table class="data-table" id="customerTable">
+        <thead>
+            <tr>
+                <th>ข้อมูลลูกค้า</th>
+                <th>อาชีพ / การศึกษา</th>
+                <th style="text-align: center;">สุขภาพ</th>
+                <th>จังหวัด</th>
+                <th style="text-align: center;">จัดการ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${customers}">
+                <td>
+                    <div class="name-highlight" th:text="${c.name}">Name</div>
+                    <div class="info-muted">ชื่อเล่น: [[${c.nickname != '' ? c.nickname : '-'}]] | อายุ: [[${c.getAge()}]] ปี</div>
+                </td>
+                <td>
+                    <div style="font-weight: 700;" th:text="${c.occupation}">-</div>
+                    <div th:if="${c.occupation == 'กำลังศึกษา'}">
+                        <span class="tag tag-edu" th:text="${c.education}">ระดับ</span>
+                        <span class="tag tag-major" th:if="${c.major != ''}" th:text="${c.major}">คณะ</span>
+                    </div>
+                </td>
+                
+                <td style="text-align: center;">
+                    <div th:if="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
+                         style="font-weight: 800; opacity: 0.4; font-size: 1.2rem;">-</div>
+                    
+                    <div th:unless="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
+                         style="font-size: 0.9rem; font-weight: 700;">
+                        <div th:if="${c.disease != null && c.disease != '' && c.disease != '-'}" th:text="${c.disease}"></div>
+                        <div th:if="${c.allergy != null && c.allergy != '' && c.allergy != '-'}" style="color: #ef4444;" th:text="'แพ้: ' + ${c.allergy}"></div>
+                    </div>
+                </td>
+
+                <td style="font-weight: 700;" th:text="${c.province}">-</td>
+                <td>
+                    <div class="action-btns">
+                        <a th:href="@{'/customers/edit/' + ${c.id}}" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a th:href="@{'/customers/delete/' + ${c.id}}" class="btn-del" onclick="return confirm('ลบข้อมูล?')"><i class="fa-solid fa-trash-can"></i></a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function search() {
+        let v = document.getElementById("q").value.toUpperCase();
+        document.querySelectorAll("#customerTable tbody tr").forEach(r => {
+            r.style.display = r.innerText.toUpperCase().includes(v) ? "" : "none";
+        });
+    }
+    const toggleSwitch = document.querySelector('.theme-switch input');
+    toggleSwitch.addEventListener('change', (e) => {
+        const theme = e.target.checked ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    });
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        toggleSwitch.checked = true;
+    }
+</script>
+</body>
+</html>
