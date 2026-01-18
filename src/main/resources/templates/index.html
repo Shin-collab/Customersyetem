@@ -44,13 +44,11 @@
             background: var(--bg-card); color: var(--text-main); outline: none; font-size: 1rem; font-weight: 600;
         }
 
-        /* Table Design */
         .data-table { width: 100%; background: var(--bg-card); border-radius: 20px; border-collapse: separate; border-spacing: 0; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         .data-table th { background: var(--gsb-pink); color: white; padding: 18px; text-align: left; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; }
         .data-table td { padding: 18px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         .data-table tr:hover { background: var(--row-hover); }
 
-        /* การเน้น Font */
         .name-highlight { font-weight: 800; font-size: 1.1rem; color: var(--gsb-pink); margin-bottom: 4px; }
         .info-muted { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
         
@@ -64,6 +62,11 @@
         .btn-edit { color: var(--text-muted); font-size: 1.2rem; }
         .btn-edit:hover { color: var(--gsb-pink); transform: scale(1.1); }
         .btn-del { color: #f87171; font-size: 1.2rem; }
+
+        /* Logout Style */
+        .logout-btn { background: none; border: none; color: #ef4444; font-weight: 800; cursor: pointer; font-family: 'Sarabun', sans-serif; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        .logout-btn:hover { opacity: 0.8; transform: scale(1.05); }
+        .user-section { display: flex; align-items: center; gap: 15px; background: var(--border-color); padding: 5px 15px; border-radius: 20px; }
     </style>
 </head>
 <body>
@@ -76,10 +79,21 @@
             <label class="theme-switch"><input type="checkbox" id="checkbox" /><div class="slider"></div></label>
             <i class="fa-solid fa-moon" style="color: #94a3b8;"></i>
         </div>
-        <a th:href="@{/profile}" class="user-nav" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700;">
-            <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" style="width: 35px; border-radius: 50%; border: 2px solid var(--gsb-pink);">
-            <span th:text="${user.name}">User</span>
-        </a>
+        
+        <div class="user-section">
+            <a th:href="@{/profile}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700;">
+                <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" style="width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--gsb-pink); object-fit: cover;">
+                <span th:text="${user.name}" style="font-size: 0.9rem;">User</span>
+            </a>
+            
+            <div style="width: 1px; height: 15px; background: #cbd5e0;"></div>
+
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit" class="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> ออก
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
 
