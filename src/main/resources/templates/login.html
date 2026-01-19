@@ -8,55 +8,29 @@
     <style>
         :root { --gsb-pink: #eb008b; --dark: #1e293b; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
-            height: 100vh; display: flex; align-items: center; justify-content: center; 
-        }
-        .login-card { 
-            background: #fff; width: 100%; max-width: 400px; padding: 40px; 
-            border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            border-top: 5px solid var(--gsb-pink);
-        }
+        body { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: #fff; width: 100%; max-width: 400px; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border-top: 5px solid var(--gsb-pink); }
         .logo { text-align: center; margin-bottom: 30px; }
         .logo h1 { font-weight: 800; font-size: 1.8rem; color: var(--dark); }
         .logo span { color: var(--gsb-pink); }
-        
-        .alert { 
-            padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px; text-align: center; 
-        }
+        .alert { padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .alert-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
         .alert-info { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
-
         .input-group { margin-bottom: 20px; position: relative; }
         .input-group i.main-icon { position: absolute; left: 15px; top: 38px; color: #94a3b8; }
         label { display: block; font-size: 0.8rem; font-weight: 600; color: #64748b; margin-bottom: 6px; }
-        input { 
-            width: 100%; padding: 12px 40px 12px 42px; border: 1px solid #cbd5e1; 
-            border-radius: 10px; outline: none; transition: 0.2s; font-size: 0.95rem;
-        }
+        input { width: 100%; padding: 12px 40px 12px 42px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none; transition: 0.2s; font-size: 0.95rem; }
         input:focus { border-color: var(--gsb-pink); box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); }
-        
-        /* สไตล์สำหรับปุ่มลูกตาหน้า Login */
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 38px;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: 0.2s;
-            z-index: 10;
-        }
+        .toggle-password { position: absolute; right: 15px; top: 38px; cursor: pointer; color: #94a3b8; transition: 0.2s; z-index: 10; }
         .toggle-password:hover { color: var(--gsb-pink); }
-
-        .btn-login { 
-            width: 100%; background: var(--gsb-pink); color: #fff; padding: 12px; 
-            border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; 
-            cursor: pointer; transition: 0.3s; margin-top: 10px;
-        }
+        .btn-login { width: 100%; background: var(--gsb-pink); color: #fff; padding: 12px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-login:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(235, 0, 139, 0.3); }
-        
         .footer-text { text-align: center; margin-top: 25px; font-size: 0.8rem; color: #94a3b8; }
         .footer-text a { color: var(--gsb-pink); text-decoration: none; font-weight: 600; }
+        /* ปรับ CSS ตรงนี้ให้ดูดีขึ้นเมื่ออยู่นอกฟอร์ม */
+        .forgot-link { text-align: right; margin-top: 10px; }
+        .forgot-link a { color: #64748b; font-size: 0.8rem; text-decoration: none; transition: 0.2s; }
+        .forgot-link a:hover { color: var(--gsb-pink); text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -70,9 +44,14 @@
     <div th:if="${param.error}" class="alert alert-error">
         <i class="fa-solid fa-circle-exclamation"></i> ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
     </div>
-
     <div th:if="${param.logout}" class="alert alert-info">
         <i class="fa-solid fa-circle-check"></i> ออกจากระบบเรียบร้อยแล้ว
+    </div>
+    <div th:if="${param.registered}" class="alert alert-info">
+        <i class="fa-solid fa-party-horn"></i> ลงทะเบียนสำเร็จ! เข้าสู่ระบบได้เลย
+    </div>
+    <div th:if="${param.passwordReset}" class="alert alert-info">
+        <i class="fa-solid fa-key"></i> เปลี่ยนรหัสผ่านใหม่เรียบร้อยแล้ว
     </div>
 
     <form th:action="@{/login}" method="post">
@@ -92,6 +71,10 @@
         <button type="submit" class="btn-login">เข้าสู่ระบบ</button>
     </form>
 
+    <div class="forgot-link">
+        <a th:href="@{/forgot-password}">ลืมรหัสผ่าน?</a>
+    </div>
+
     <div class="footer-text">
         ยังไม่มีบัญชีผู้ใช้? <a th:href="@{/register}">ลงทะเบียนที่นี่</a>
     </div>
@@ -100,16 +83,12 @@
 <script>
     const eyeIcon = document.getElementById('eyeIcon');
     const passwordInput = document.getElementById('login-password');
-
     eyeIcon.addEventListener('click', () => {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        
-        // สลับไอคอน
         eyeIcon.classList.toggle('fa-eye');
         eyeIcon.classList.toggle('fa-eye-slash');
     });
 </script>
-
 </body>
 </html>

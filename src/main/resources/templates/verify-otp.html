@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ยืนยัน OTP - GSB Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --gsb-pink: #eb008b; --bg-gray: #f4f7f6; }
+        body { font-family: 'Sarabun', sans-serif; background: var(--bg-gray); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; }
+        .icon { font-size: 3.5rem; color: var(--gsb-pink); margin-bottom: 1.5rem; }
+        h2 { color: #333; margin-bottom: 0.5rem; }
+        p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
+        input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-size: 1.8rem; text-align: center; letter-spacing: 8px; margin-bottom: 1.5rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--gsb-pink); box-shadow: 0 0 10px rgba(235, 0, 139, 0.2); }
+        button { background: var(--gsb-pink); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #c20072; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h2>ยืนยันตัวตน</h2>
+        <p>ระบุรหัส 6 หลักที่ส่งไปยังอีเมลของคุณ <br><strong th:text="${session.USER_PENDING}"></strong></p>
+        
+        <form th:action="@{/verify-otp}" method="post">
+            <input type="text" name="otp" maxlength="6" placeholder="000000" required autofocus>
+            <button type="submit">เข้าสู่ระบบ</button>
+        </form>
+        
+        <div style="margin-top: 1.5rem;">
+            <a href="/login" style="color: #888; text-decoration: none; font-size: 0.8rem;">ยกเลิกและกลับหน้าเดิม</a>
+        </div>
+    </div>
+</body>
+</html>

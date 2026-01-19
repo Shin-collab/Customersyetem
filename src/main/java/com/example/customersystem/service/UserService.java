@@ -16,28 +16,50 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // สำหรับบันทึกผู้ใช้ใหม่ (สมัครสมาชิก)
     public void saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // --- 🛑 จุดที่เพิ่ม: เช็คข้อมูลซ้ำก่อนบันทึก ---
+        
+        // 1. เช็ค Username ซ้ำ (ยกเว้นกรณีอัปเดตคนเดิม)
+        User existingUser = userRepo.findByUsername(user.getUsername());
+        if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+            throw new RuntimeException("ชื่อผู้ใช้นี้ถูกใช้งานแล้ว กรุณาใช้ชื่ออื่น");
+        }
+
+        // 2. เช็ค Email ซ้ำ
+        User existingEmail = userRepo.findByEmail(user.getEmail());
+        if (existingEmail != null && !existingEmail.getId().equals(user.getId())) {
+            throw new RuntimeException("อีเมลนี้ถูกลงทะเบียนไว้แล้ว");
+        }
+
+        // --- 🔐 เข้ารหัสผ่านก่อนบันทึก ---
+        // เช็คก่อนว่ารหัสที่ส่งมาต้องไม่ว่าง และยังไม่ถูกเข้ารหัส (ความยาวรหัสที่เข้ารหัสแล้วปกติจะ > 30)
+        if (user.getPassword() != null && user.getPassword().length() < 30) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         userRepo.save(user);
     }
 
-    // เพิ่มอันนี้: สำหรับหาข้อมูลผู้ใช้ด้วย Email (เอาไว้ดึงชื่อมาโชว์ที่หน้าแรก)
+    public User findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
 
-    // เพิ่มอันนี้: สำหรับระบบเปลี่ยนรหัสผ่านภายในเว็บ
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    // ฟังก์ชันอัปเดตรหัสผ่าน (ใช้ร่วมกับระบบ OTP ที่เราทำไว้)
     public boolean updatePassword(String email, String oldPassword, String newPassword) {
         User user = userRepo.findByEmail(email);
-        
-        // เช็คก่อนว่ารหัสผ่านเดิมที่กรอกมา ถูกต้องตรงกับในฐานข้อมูลไหม
-        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
-            // ถ้ารหัสเดิมถูก ให้เข้ารหัสอันใหม่แล้วบันทึกทับลงไป
+        if (user != null && passwordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepo.save(user);
-            return true; // เปลี่ยนสำเร็จ
+            return true;
         }
-        return false; // รหัสเดิมผิด เปลี่ยนไม่ได้
+        return false;
     }
 }

@@ -25,24 +25,35 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // ปล่อยผ่านไฟล์ Static และหน้า Login/Register
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/img/**").permitAll()
-                // หน้าอื่นๆ ทั้งหมด (หน้าแรก, เพิ่มลูกค้า, โปรไฟล์) ต้องล็อคอินเท่านั้น
+                // 🛑 อนุญาตให้เข้าถึงหน้า Login, Register และระบบกู้รหัสผ่านทั้งหมดโดยไม่ต้อง Login
+                .requestMatchers(
+                    "/login", 
+                    "/register", 
+                    "/verify-otp", 
+                    "/forgot-password", 
+                    "/verify-forgot-password", 
+                    "/reset-password",
+                    "/css/**", 
+                    "/js/**", 
+                    "/img/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .userDetailsService(userDetailsService)
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true) // ล็อคอินเสร็จไปหน้าแรก
+                // ✅ ใช้ defaultSuccessUrl เพื่อให้ส่งต่อไปที่ Controller หลัง Login สำเร็จเพื่อทำ OTP
+                .defaultSuccessUrl("/login-success", true) 
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
-                .invalidateHttpSession(true) // เคลียร์ Session ให้สะอาด
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
             )
-            .csrf(csrf -> csrf.disable()); // ปิดเพื่อความง่ายในการส่งฟอร์ม (ในระดับโปรเจกต์เรียนรู้)
+            .csrf(csrf -> csrf.disable()); // ปิด CSRF เพื่อความสะดวกในการพัฒนาระบบหลังบ้าน
             
         return http.build();
     }
