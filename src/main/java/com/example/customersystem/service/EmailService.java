@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 @Service
 public class EmailService {
 
-    // ✅ แก้เป็นแบบนี้ครับ ระบบจะไปดึงรหัสจาก Railway Variables มาใช้เอง
+    // ✅ ดึงค่ารหัสจาก Railway Variables
     private final String BREVO_API_KEY = System.getenv("BREVO_API_KEY"); 
 
     public void sendOtpEmail(String email, String otp) {
@@ -17,8 +17,9 @@ public class EmailService {
             throw new IllegalArgumentException("Recipient email cannot be null or empty");
         }
 
+        // ✅ เปลี่ยน email ผู้ส่งจาก a06578001 เป็น sskg82760@gmail.com (เมลของพี่เอง)
         String jsonBody = "{"
-                + "\"sender\":{\"name\":\"GSB Portal\",\"email\":\"a06578001@gmail.com\"},"
+                + "\"sender\":{\"name\":\"GSB Portal\",\"email\":\"sskg82760@gmail.com\"},"
                 + "\"to\":[{\"email\":\"" + email + "\"}],"
                 + "\"subject\":\"Your OTP Code: " + otp + "\","
                 + "\"htmlContent\":\"<html><body><h3>รหัส OTP ของคุณคือ: <b style='color:blue;'>" + otp + "</b></h3><p>รหัสนี้จะหมดอายุใน 5 นาที</p></body></html>\""
@@ -38,7 +39,7 @@ public class EmailService {
                 System.err.println("API Error: " + response.body());
                 throw new RuntimeException("Brevo API Error: " + response.body());
             } else {
-                System.out.println("✅ ส่งเมลสำเร็จ!");
+                System.out.println("✅ ส่งเมลสำเร็จ! ผ่านเมล sskg82760 เรียบร้อย");
             }
         } catch (Exception e) {
             e.printStackTrace();
