@@ -9,27 +9,26 @@ import java.net.http.HttpResponse;
 @Service
 public class EmailService {
 
-    // 1. ใส่ API Key จากหน้า Brevo (SMTP & API -> API Keys)
-    private final String BREVO_API_KEY = "ใส่_API_KEY_ของพี่ตรงนี้"; 
+    // 1. พี่ก๊อป API Key จากหน้า Brevo (ที่ขึ้นต้นด้วย xkeysib-...) มาวางในฟันหนูนี้ครับ
+    private final String BREVO_API_KEY = "รหัส_API_KEY_จริงของพี่"; 
 
     public void sendOtpEmail(String email, String otp) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("อีเมลผู้รับห้ามเป็นค่าว่าง");
         }
 
-        // 2. สร้างโครงสร้างข้อมูล JSON สำหรับส่ง (ใช้ Sender ที่พี่ยืนยันไว้ใน Brevo)
+        // 2. ปรับ Sender ให้เป็นเมลที่พี่ยืนยันโปรไฟล์ไว้ (a06578001@...)
         String jsonBody = "{"
-                + "\"sender\":{\"name\":\"GSB Portal\",\"email\":\"a06578001@smtp-brevo.com\"},"
+                + "\"sender\":{\"name\":\"GSB Portal\",\"email\":\"a06578001@gmail.com\"},"
                 + "\"to\":[{\"email\":\"" + email + "\"}],"
                 + "\"subject\":\"รหัสยืนยันเข้าใช้งาน GSB Portal\","
                 + "\"htmlContent\":\"<html><body><h3>รหัส OTP ของคุณคือ: <b style='color:blue;'>" + otp + "</b></h3><p>กรุณาใช้รหัสนี้ภายใน 5 นาทีครับ</p></body></html>\""
                 + "}";
 
-        // 3. ใช้ HttpClient (มีมากับ Java 11+ อยู่แล้ว ไม่ต้องเพิ่ม dependency)
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
-                .header("api-key", BREVO_API_KEY)
+                .header("api-key", BREVO_API_KEY) // ตัวนี้ห้ามมีภาษาไทยเด็ดขาด
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
