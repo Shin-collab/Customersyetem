@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping; // เพิ่มอันนี้
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Random;
@@ -27,15 +27,11 @@ public class AuthController {
         this.emailService = emailService;
     }
 
-    // ==========================================
-    // 1. ระบบ LOGIN (แก้ Error 405 ที่นี่)
-    // ==========================================
     @GetMapping("/login")
     public String viewLoginPage() {
         return "login";
     }
 
-    // ใช้ @RequestMapping เพื่อรองรับทั้ง GET และ POST จาก Spring Security
     @RequestMapping("/login-success")
     public String handleLoginSuccess(HttpSession session, Authentication authentication) {
         try {
@@ -49,26 +45,22 @@ public class AuthController {
             if (user == null) return "redirect:/login?error";
             
             String targetEmail = user.getEmail(); 
+            String otp = String.format("%06d", new Random().nextInt(1000000));
             
-            // สร้าง OTP สำหรับ Login
-            String otp = String.format("%06d", new Random().nextInt(999999));
             session.setAttribute("OTP_CODE", otp);
             session.setAttribute("PENDING_USER", user);
             
-            // ส่ง Email OTP
+            // ส่ง Email ผ่าน Service (ต้องมั่นใจว่าใน EmailService ชื่อ method นี้รับ String, String)
             emailService.sendOtpEmail(targetEmail, otp);
             
-            // ส่งไปหน้ายืนยัน OTP (หน้า verify-otp.html)
             return "redirect:/verify-otp";
             
         } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/login?error"; 
         }
     }
 
-    // ==========================================
-    // 2. ระบบ REGISTER
-    // ==========================================
     @GetMapping("/register")
     public String viewRegisterPage(Model model) {
         model.addAttribute("user", new User());
@@ -87,9 +79,6 @@ public class AuthController {
         }
     }
 
-    // ==========================================
-    // 3. ระบบยืนยัน OTP (หลังจาก Login สำเร็จ)
-    // ==========================================
     @GetMapping("/verify-otp")
     public String viewVerifyOtpPage(HttpSession session) {
         if (session.getAttribute("OTP_CODE") == null) return "redirect:/login";
@@ -101,15 +90,12 @@ public class AuthController {
         String sessionOtp = (String) session.getAttribute("OTP_CODE");
         if (sessionOtp != null && sessionOtp.equals(otp)) {
             session.removeAttribute("OTP_CODE");
-            return "redirect:/"; // เข้าสู่หน้าแรกของระบบ
+            return "redirect:/";
         }
         model.addAttribute("error", "รหัส OTP ไม่ถูกต้อง");
         return "verify-otp";
     }
 
-    // ==========================================
-    // 4. ระบบลืมรหัสผ่าน (FORGOT PASSWORD)
-    // ==========================================
     @GetMapping("/forgot-password")
     public String viewForgotPasswordPage() {
         return "forgot-password";
@@ -119,7 +105,7 @@ public class AuthController {
     public String processForgotPassword(@RequestParam String email, HttpSession session, Model model) {
         User user = userService.findByEmail(email);
         if (user != null) {
-            String otp = String.format("%06d", new Random().nextInt(999999));
+            String otp = String.format("%06d", new Random().nextInt(1000000));
             session.setAttribute("FORGOT_PASS_OTP", otp);
             session.setAttribute("FORGOT_USER_EMAIL", email);
             
@@ -164,15 +150,13 @@ public class AuthController {
         return "redirect:/login";
     }
 
-    // ==========================================
-    // 5. ระบบเปลี่ยนรหัสในหน้า PROFILE
-    // ==========================================
     @PostMapping("/request-change-password")
     public String requestChangePassword(@RequestParam String newPassword, HttpSession session, Authentication authentication) {
-        String otp = String.format("%06d", new Random().nextInt(999999));
+        String otp = String.format("%06d", new Random().nextInt(1000000));
         session.setAttribute("CHANGE_PASS_OTP", otp);
         session.setAttribute("NEW_PASSWORD_TEMP", newPassword);
         User user = userService.findByUsername(authentication.getName());
+        
         emailService.sendOtpEmail(user.getEmail(), otp);
         return "redirect:/verify-change-password";
     }
