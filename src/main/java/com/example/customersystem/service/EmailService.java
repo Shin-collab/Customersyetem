@@ -9,18 +9,20 @@ import java.net.http.HttpResponse;
 @Service
 public class EmailService {
 
-    private final String BREVO_API_KEY = "YOUR_ACTUAL_API_KEY_HERE"; 
+    // ใช้รหัส xkeysib ที่พี่เพิ่ง Generate มาใหม่ครับ
+    private final String BREVO_API_KEY = "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"; 
 
     public void sendOtpEmail(String email, String otp) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Recipient email cannot be null or empty");
         }
 
+        // ตั้งค่า Sender ให้ตรงกับอีเมลที่พี่ยืนยันไว้ใน Brevo
         String jsonBody = "{"
                 + "\"sender\":{\"name\":\"GSB Portal\",\"email\":\"a06578001@gmail.com\"},"
                 + "\"to\":[{\"email\":\"" + email + "\"}],"
-                + "\"subject\":\"Your OTP Code is " + otp + "\","
-                + "\"htmlContent\":\"<html><body><h3>Your OTP: <b style='color:blue;'>" + otp + "</b></h3><p>Valid for 5 minutes.</p></body></html>\""
+                + "\"subject\":\"Your OTP Code: " + otp + "\","
+                + "\"htmlContent\":\"<html><body><h3>รหัส OTP ของคุณคือ: <b style='color:blue;'>" + otp + "</b></h3><p>รหัสนี้จะหมดอายุใน 5 นาที</p></body></html>\""
                 + "}";
 
         HttpClient client = HttpClient.newHttpClient();
@@ -37,7 +39,7 @@ public class EmailService {
                 System.err.println("API Error: " + response.body());
                 throw new RuntimeException("Brevo API Error: " + response.body());
             } else {
-                System.out.println("✅ Email sent successfully via API!");
+                System.out.println("✅ ส่งเมลสำเร็จ! ผ่าน Brevo API เรียบร้อย");
             }
         } catch (Exception e) {
             e.printStackTrace();
