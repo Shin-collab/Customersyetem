@@ -19,7 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String loginInput) throws UsernameNotFoundException {
-        // ค้นหาจาก Username ก่อน ถ้าไม่เจอค่อยหาจาก Email (ทำให้ระบบยืดหยุ่นมาก)
         User user = userRepository.findByUsername(loginInput);
         if (user == null) {
             user = userRepository.findByEmail(loginInput);
@@ -28,10 +27,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("ไม่พบผู้ใช้งานหรืออีเมล: " + loginInput);
         }
-
-        // คืนค่า UserDetails พร้อมสิทธิ์ว่าง (ArrayList) ไปก่อนเพื่อความประหยัดบรรทัด
         return new org.springframework.security.core.userdetails.User(
-            user.getUsername(), // ใช้ Username เป็นหลักในการระบุตัวตนระบบ
+            user.getUsername(), 
             user.getPassword(), 
             new ArrayList<>()
         );
