@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | GSB System</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,52 +12,90 @@
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --txt: #f8fafc; --muted: #94a3b8; --pink-light: #321c29; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background: var(--bg); color: var(--txt); }
+        body { background: var(--bg); color: var(--txt); min-height: 100vh; }
         
-        /* Navbar ปรับใหม่ให้เด่นขึ้น */
-        nav { background: var(--card); padding: 12px 8%; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-        .container { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+        /* Navbar Responsive */
+        nav { 
+            background: var(--card); 
+            padding: 12px 5%; 
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            backdrop-filter: blur(10px); 
+        }
 
-        /* ปุ่มสลับโหมดแบบใหม่ (เห็นชัดแน่นอน) */
+        .container { max-width: 500px; margin: 20px auto; padding: 0 15px; }
+
+        /* ปุ่มสลับโหมด */
         .theme-switcher {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: var(--pink-light);
-            padding: 6px 15px;
+            padding: 8px 15px;
             border-radius: 50px;
             cursor: pointer;
             border: 1px solid rgba(235, 0, 139, 0.1);
             user-select: none;
         }
-        .theme-switcher:hover { opacity: 0.8; transform: scale(1.02); }
-        .theme-switcher i { color: var(--pink); font-size: 1rem; }
-        .theme-switcher span { font-size: 0.8rem; font-weight: 800; color: var(--pink); }
+        .theme-switcher i { color: var(--pink); font-size: 0.9rem; }
+        .theme-switcher span { font-size: 0.75rem; font-weight: 800; color: var(--pink); }
 
-        .card { background: var(--card); border-radius: 24px; padding: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid rgba(0,0,0,0.03); }
+        .card { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.03); }
+        
+        /* Profile Header */
         .profile-header { text-align: center; }
-        .avatar-wrapper { position: relative; width: 120px; height: 120px; margin: 0 auto 15px; }
-        .avatar-img { width: 100%; height: 100%; border-radius: 40px; border: 4px solid var(--card); object-fit: cover; box-shadow: 0 10px 20px rgba(235, 0, 139, 0.2); }
-        .up-btn { position: absolute; bottom: -5px; right: -5px; background: var(--pink); color: #fff; width: 35px; height: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid var(--card); }
+        .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 15px; }
+        .avatar-img { width: 100%; height: 100%; border-radius: 35px; border: 4px solid var(--card); object-fit: cover; box-shadow: 0 10px 20px rgba(235, 0, 139, 0.2); }
+        .up-btn { position: absolute; bottom: -2px; right: -2px; background: var(--pink); color: #fff; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid var(--card); }
 
-        .stats { display: flex; justify-content: space-around; padding: 10px 0; background: var(--pink-light); border-radius: 20px; margin-bottom: 25px; }
-        .stat b { display: block; font-size: 1.2rem; color: var(--pink); font-weight: 800; text-align: center;}
-        .stat span { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; text-align: center;}
+        .stats { display: flex; justify-content: space-around; padding: 15px 0; background: var(--pink-light); border-radius: 20px; margin-bottom: 20px; }
+        .stat b { display: block; font-size: 1.1rem; color: var(--pink); font-weight: 800; text-align: center;}
+        .stat span { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; text-align: center; font-weight: 700;}
 
         .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--txt); }
-        label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px; color: var(--muted); }
-        input { width: 100%; padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; background: var(--bg); color: var(--txt); outline: none; margin-bottom: 20px; }
-        input:focus { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); }
         
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; background: var(--pink); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px -6px rgba(235, 0, 139, 0.5); }
-        .otp-notice { background: #fff9db; color: #856404; padding: 12px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        label { font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 8px; color: var(--muted); padding-left: 5px; }
+        input { 
+            width: 100%; padding: 14px; border: 2px solid rgba(0,0,0,0.05); border-radius: 14px; 
+            background: var(--bg); color: var(--txt); outline: none; margin-bottom: 15px; font-size: 1rem;
+        }
+        input:focus { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); background: var(--card); }
+        
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 16px; border: none; 
+            background: var(--pink); color: #fff; font-weight: 800; font-size: 1rem;
+            cursor: pointer; box-shadow: 0 8px 20px -6px rgba(235, 0, 139, 0.5); 
+            transition: 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        .otp-notice { 
+            background: #fff9db; color: #856404; padding: 12px 15px; border-radius: 12px; 
+            font-size: 0.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; 
+            line-height: 1.4; border: 1px solid #ffeeba;
+        }
+
+        /* ปรับปรุงเฉพาะมือถือ */
+        @media (max-width: 480px) {
+            nav { padding: 12px 15px; }
+            .container { margin: 15px auto; }
+            .card { padding: 20px; }
+            input, .btn { height: 55px; }
+            .theme-switcher span { display: none; } /* ซ่อนข้อความในมือถือ เหลือแค่ไอคอน */
+            .theme-switcher { padding: 8px 12px; }
+        }
     </style>
 </head>
 <body>
 
 <nav>
-    <a th:href="@{/}" style="text-decoration: none; color: var(--txt); font-weight: 700; display: flex; align-items: center; gap: 8px;">
-        <i class="fa fa-chevron-left"></i> ย้อนกลับ
+    <a th:href="@{/}" style="text-decoration: none; color: var(--txt); font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+        <i class="fa fa-chevron-left"></i> กลับหน้าหลัก
     </a>
     
     <div class="theme-switcher" onclick="toggleTheme()" id="themeBtn">
@@ -72,22 +111,25 @@
             <label for="f" class="up-btn"><i class="fa fa-camera"></i></label>
             <input type="file" id="f" hidden onchange="handleImg(this)">
         </div>
-        <h1 style="font-size: 1.5rem; font-weight: 800;" th:text="${user.name}">User Name</h1>
-        <p style="color: var(--muted); font-size: 0.9rem; margin-top: 5px;">จัดการข้อมูลส่วนตัวและความปลอดภัย</p>
+        <h1 style="font-size: 1.4rem; font-weight: 800;" th:text="${user.name}">User Name</h1>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 4px;">จัดการข้อมูลและความปลอดภัย</p>
     </div>
 
     <div class="stats">
         <div class="stat"><b th:text="${customers.size()}">0</b><span>ลูกค้า</span></div>
-        <div class="stat"><b>Active</b><span>สถานะ</span></div>
+        <div class="stat"><b>ปกติ</b><span>สถานะ</span></div>
         <div class="stat"><b th:text="${#dates.format(#dates.createNow(), 'dd/MM/yy')}"></b><span>วันที่</span></div>
     </div>
 
     <div class="card">
-        <div class="section-title"><i class="fa fa-shield-halved" style="color: var(--pink);"></i> เปลี่ยนรหัสผ่าน</div>
+        <div class="section-title">
+            <i class="fa fa-shield-halved" style="color: var(--pink);"></i> 
+            <span>เปลี่ยนรหัสผ่าน</span>
+        </div>
         
         <div class="otp-notice">
-            <i class="fa fa-info-circle"></i>
-            ระบบจะส่งรหัสยืนยัน (OTP) ไปยังอีเมลของคุณเพื่อยืนยันการเปลี่ยนรหัส
+            <i class="fa fa-info-circle" style="font-size: 1.2rem;"></i>
+            <span>ระบบจะส่งรหัส <b>OTP</b> ไปยังอีเมลของคุณเพื่อยืนยันตัวตน</span>
         </div>
 
         <form th:action="@{/request-change-password}" method="post" onsubmit="return val()">
@@ -126,11 +168,12 @@
         updateThemeUI(next);
     };
 
-    // โหลดธีมที่บันทึกไว้
+    // โหลดธีมตั้งต้น
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeUI(savedTheme);
 
+    // พรีวิวรูปภาพ
     function handleImg(i) {
         if (i.files && i.files[0]) {
             let r = new FileReader();
@@ -139,14 +182,15 @@
         }
     }
 
+    // ตรวจสอบความถูกต้องของรหัสผ่าน
     function val() {
         const n = document.getElementById('n').value;
         const c = document.getElementById('c').value;
         if(n !== c) {
-            alert('รหัสผ่านใหม่ไม่ตรงกัน กรุณาเช็คอีกครั้ง!'); return false;
+            alert('❌ รหัสผ่านใหม่ไม่ตรงกัน!'); return false;
         }
         if(n.length < 6) {
-            alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร!'); return false;
+            alert('❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร!'); return false;
         }
         return true;
     }

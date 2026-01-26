@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KYC | GSB Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,11 +13,21 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; transition: 0.2s; }
         body { background: var(--bg); color: var(--tx); padding: 30px 15px; line-height: 1.6; }
         
-        .card { background: var(--cd); max-width: 600px; margin: auto; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 35px; }
+        .card { background: var(--cd); max-width: 650px; margin: auto; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 35px; }
         .h-title { font-size: 1.6rem; font-weight: 800; color: var(--pk); text-align: center; margin-bottom: 30px; letter-spacing: 1px; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .full { grid-column: span 2; }
+        
+        /* ปรับแต่งสำหรับมือถือ */
+        @media (max-width: 600px) {
+            body { padding: 15px 10px; }
+            .card { padding: 20px; }
+            .grid { grid-template-columns: 1fr; gap: 15px; } /* เปลี่ยนเป็นคอลัมน์เดียว */
+            .full { grid-column: span 1; }
+            input, select, .btn { height: 50px; font-size: 1rem !important; } /* ขยายให้กดง่าย */
+            .btn-r { flex-direction: column; } /* ปุ่มกดยกเลิก/บันทึก จะเรียงลงมาข้างล่าง */
+        }
         
         label { font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 8px; color: var(--tx); opacity: 0.9; }
         input, select { 
@@ -25,10 +36,14 @@
         }
         input:focus { border-color: var(--pk); background: var(--cd); box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); }
         
-        /* กล่องการศึกษา เน้นเส้นประสีชมพู */
         #eduBox { 
             display: none; background: rgba(235,0,139,0.03); padding: 20px; border-radius: 15px; 
             border: 2px dashed var(--pk); grid-column: span 2; margin: 5px 0 15px 0;
+        }
+        
+        /* แก้ไข eduBox ให้เป็นแถวเดียวในมือถือด้วย */
+        @media (max-width: 600px) {
+            #eduBox { grid-column: span 1; padding: 15px; }
         }
 
         .btn-r { display: flex; gap: 12px; margin-top: 25px; }
@@ -37,8 +52,7 @@
         .cc { background: var(--bd); color: var(--tx); }
         .btn:hover { transform: translateY(-2px); opacity: 0.9; }
         
-        .tgl { position: fixed; top: 20px; right: 20px; cursor: pointer; color: var(--pk); font-size: 1.5rem; z-index: 100; transition: transform 0.3s; }
-        .tgl:hover { transform: rotate(180deg); }
+        .tgl { position: fixed; top: 15px; right: 15px; cursor: pointer; color: var(--pk); font-size: 1.5rem; z-index: 100; background: var(--cd); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -126,8 +140,13 @@
 
     // Toggle Education Box
     function upd() { 
-        const isStudent = document.getElementById('occ').value === 'กำลังศึกษา';
-        document.getElementById('eduBox').style.display = isStudent ? 'grid' : 'none';
+        const occVal = document.getElementById('occ').value;
+        const eduBox = document.getElementById('eduBox');
+        if (occVal === 'กำลังศึกษา') {
+            eduBox.style.display = 'grid';
+        } else {
+            eduBox.style.display = 'none';
+        }
     }
 
     // Validation

@@ -2,38 +2,121 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gsb-pink: #eb008b; --dark: #1e293b; --error-bg: #fff5f5; --error-text: #c53030; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: #f1f5f9; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .reg-card { background: #fff; width: 100%; max-width: 450px; padding: 35px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--dark); font-size: 1.5rem; }
-        .header span { color: var(--gsb-pink); }
+        :root { --gsb-pink: #eb008b; --dark: #1e293b; --error-bg: #fff5f5; --error-text: #c53030; --slate: #64748b; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* สไตล์แจ้งเตือน Error */
-        .alert-error { background: var(--error-bg); color: var(--error-text); padding: 12px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #feb2b2; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; }
+        body { 
+            font-family: 'Sarabun', 'Inter', sans-serif; 
+            background: #f1f5f9; 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px;
+        }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full { grid-column: span 2; }
-        label { display: block; font-size: 0.75rem; font-weight: 600; color: #64748b; margin-bottom: 5px; }
-        input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: 0.2s; }
-        input:focus { border-color: var(--gsb-pink); box-shadow: 0 0 0 3px rgba(235,0,139,0.1); }
-        .btn-reg { width: 100%; background: var(--gsb-pink); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        .btn-reg:hover { opacity: 0.9; transform: translateY(-1px); }
-        .footer { text-align: center; margin-top: 20px; font-size: 0.8rem; }
-        .footer a { color: var(--gsb-pink); text-decoration: none; font-weight: 600; }
+        .reg-card { 
+            background: #fff; 
+            width: 100%; 
+            max-width: 450px; 
+            padding: 40px 30px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); 
+            border-top: 6px solid var(--gsb-pink);
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { color: var(--dark); font-size: 1.6rem; font-weight: 800; }
+        .header span { color: var(--gsb-pink); }
+        .header p { color: var(--slate); font-size: 0.9rem; margin-top: 5px; }
         
+        .alert-error { 
+            background: var(--error-bg); 
+            color: var(--error-text); 
+            padding: 14px; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+            border: 1px solid #feb2b2; 
+            font-size: 0.85rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-weight: 600;
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .full { grid-column: span 2; }
+        
+        label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; margin-left: 4px; }
+        
+        input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            outline: none; 
+            transition: 0.2s; 
+            font-size: 0.95rem;
+            background: #f8fafc;
+        }
+        input:focus { 
+            border-color: var(--gsb-pink); 
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); 
+        }
+
         .password-container { position: relative; }
-        .toggle-password { position: absolute; right: 12px; top: 33px; cursor: pointer; color: #94a3b8; }
+        .toggle-password { 
+            position: absolute; 
+            right: 15px; 
+            top: 40px; 
+            cursor: pointer; 
+            color: #94a3b8; 
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+        .toggle-password:hover { color: var(--gsb-pink); }
+
+        .btn-reg { 
+            width: 100%; 
+            background: var(--gsb-pink); 
+            color: #fff; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            font-size: 1.05rem;
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: 0.3s; 
+        }
+        .btn-reg:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(235, 0, 139, 0.4); }
+        .btn-reg:active { transform: translateY(0); }
+
+        .footer { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--slate); font-weight: 600; }
+        .footer a { color: var(--gsb-pink); text-decoration: none; font-weight: 800; margin-left: 5px; }
+
+        /* ปรับปรุงสำหรับหน้าจอมือถือ */
+        @media (max-width: 480px) {
+            .reg-card { padding: 35px 20px; }
+            .grid { grid-template-columns: 1fr; gap: 15px; }
+            .full { grid-column: span 1; }
+            input, .btn-reg { height: 55px; font-size: 1.1rem; }
+            .toggle-password { top: 43px; }
+        }
     </style>
 </head>
 <body>
 <div class="reg-card">
-    <div class="header"><h2>สร้างบัญชี <span>พนักงาน</span></h2></div>
+    <div class="header">
+        <h2>สร้างบัญชี <span>พนักงาน</span></h2>
+        <p>ลงทะเบียนเพื่อเข้าใช้งานระบบ GSB Portal</p>
+    </div>
 
     <div th:if="${errorMessage}" class="alert-error">
         <i class="fa-solid fa-circle-exclamation"></i>
@@ -44,25 +127,30 @@
         <div class="grid">
             <div class="full">
                 <label>ชื่อ-นามสกุล</label>
-                <input type="text" name="name" placeholder="สมชาย ใจดี" th:value="${user != null ? user.name : ''}" required>
+                <input type="text" name="name" placeholder="ระบุชื่อและนามสกุล" th:value="${user != null ? user.name : ''}" required>
             </div>
-            <div>
+            
+            <div class="full-mobile">
                 <label>Username</label>
-                <input type="text" name="username" placeholder="admin01" th:value="${user != null ? user.username : ''}" required>
+                <input type="text" name="username" placeholder="ตั้งชื่อผู้ใช้" th:value="${user != null ? user.username : ''}" required>
             </div>
-            <div>
+            
+            <div class="full-mobile">
                 <label>Email</label>
                 <input type="email" name="email" placeholder="staff@gsb.or.th" th:value="${user != null ? user.email : ''}" required>
             </div>
+            
             <div class="full password-container">
-                <label>Password</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" required>
+                <label>รหัสผ่าน</label>
+                <input type="password" name="password" id="password" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6">
                 <i class="fa-solid fa-eye toggle-password" id="eyeIcon"></i>
             </div>
         </div>
+        
         <button type="submit" class="btn-reg">ลงทะเบียนเข้าใช้งาน</button>
     </form>
-    <div class="footer">เป็นสมาชิกอยู่แล้ว? <a th:href="@{/login}">เข้าสู่ระบบ</a></div>
+    
+    <div class="footer">เป็นสมาชิกอยู่แล้ว? <a th:href="@{/login}">เข้าสู่ระบบที่นี่</a></div>
 </div>
 
 <script>

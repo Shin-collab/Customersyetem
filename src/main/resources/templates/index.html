@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | GSB Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,7 +26,19 @@
             border-bottom: 4px solid var(--gsb-pink); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
-        /* Dark Mode Switch */
+        /* --- ปรับแต่งสำหรับมือถือ (Responsive) --- */
+        @media (max-width: 768px) {
+            nav { padding: 1rem; flex-direction: column; gap: 15px; text-align: center; }
+            .toolbar { flex-direction: column; align-items: stretch !important; gap: 10px; }
+            .search-container { max-width: 100% !important; }
+            .btn-pink { justify-content: center; height: 50px; }
+            .user-section { width: 100%; justify-content: center; }
+            
+            /* ทำให้ตารางเลื่อนได้ในมือถือ ไม่ให้บีบจนเละ */
+            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 20px; }
+            .data-table { min-width: 800px; } /* ล็อกความกว้างตารางขั้นต่ำไว้ให้พอดีข้อมูล */
+        }
+
         .theme-switch-wrapper { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
         .theme-switch { display: inline-block; height: 24px; position: relative; width: 45px; }
         .theme-switch input { display:none; }
@@ -63,7 +76,6 @@
         .btn-edit:hover { color: var(--gsb-pink); transform: scale(1.1); }
         .btn-del { color: #f87171; font-size: 1.2rem; }
 
-        /* Logout Style */
         .logout-btn { background: none; border: none; color: #ef4444; font-weight: 800; cursor: pointer; font-family: 'Sarabun', sans-serif; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
         .logout-btn:hover { opacity: 0.8; transform: scale(1.05); }
         .user-section { display: flex; align-items: center; gap: 15px; background: var(--border-color); padding: 5px 15px; border-radius: 20px; }
@@ -73,7 +85,7 @@
 
 <nav>
     <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">GSB <span style="color: var(--gsb-pink);">PORTAL</span></div>
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 10px;">
         <div class="theme-switch-wrapper">
             <i class="fa-solid fa-sun" style="color: #facc15;"></i>
             <label class="theme-switch"><input type="checkbox" id="checkbox" /><div class="slider"></div></label>
@@ -85,9 +97,7 @@
                 <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" style="width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--gsb-pink); object-fit: cover;">
                 <span th:text="${user.name}" style="font-size: 0.9rem;">User</span>
             </a>
-            
             <div style="width: 1px; height: 15px; background: #cbd5e0;"></div>
-
             <form th:action="@{/logout}" method="post" style="margin: 0;">
                 <button type="submit" class="logout-btn">
                     <i class="fa-solid fa-right-from-bracket"></i> ออก
@@ -106,51 +116,50 @@
         <a th:href="@{/customers/add}" class="btn-pink"><i class="fa-solid fa-user-plus"></i> เพิ่มลูกค้า</a>
     </div>
 
-    <table class="data-table" id="customerTable">
-        <thead>
-            <tr>
-                <th>ข้อมูลลูกค้า</th>
-                <th>อาชีพ / การศึกษา</th>
-                <th style="text-align: center;">สุขภาพ</th>
-                <th>จังหวัด</th>
-                <th style="text-align: center;">จัดการ</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="c : ${customers}">
-                <td>
-                    <div class="name-highlight" th:text="${c.name}">Name</div>
-                    <div class="info-muted">ชื่อเล่น: [[${c.nickname != '' ? c.nickname : '-'}]] | อายุ: [[${c.getAge()}]] ปี</div>
-                </td>
-                <td>
-                    <div style="font-weight: 700;" th:text="${c.occupation}">-</div>
-                    <div th:if="${c.occupation == 'กำลังศึกษา'}">
-                        <span class="tag tag-edu" th:text="${c.education}">ระดับ</span>
-                        <span class="tag tag-major" th:if="${c.major != ''}" th:text="${c.major}">คณะ</span>
-                    </div>
-                </td>
-                
-                <td style="text-align: center;">
-                    <div th:if="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
-                         style="font-weight: 800; opacity: 0.4; font-size: 1.2rem;">-</div>
-                    
-                    <div th:unless="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
-                         style="font-size: 0.9rem; font-weight: 700;">
-                        <div th:if="${c.disease != null && c.disease != '' && c.disease != '-'}" th:text="${c.disease}"></div>
-                        <div th:if="${c.allergy != null && c.allergy != '' && c.allergy != '-'}" style="color: #ef4444;" th:text="'แพ้: ' + ${c.allergy}"></div>
-                    </div>
-                </td>
-
-                <td style="font-weight: 700;" th:text="${c.province}">-</td>
-                <td>
-                    <div class="action-btns">
-                        <a th:href="@{'/customers/edit/' + ${c.id}}" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <a th:href="@{'/customers/delete/' + ${c.id}}" class="btn-del" onclick="return confirm('ลบข้อมูล?')"><i class="fa-solid fa-trash-can"></i></a>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table" id="customerTable">
+            <thead>
+                <tr>
+                    <th>ข้อมูลลูกค้า</th>
+                    <th>อาชีพ / การศึกษา</th>
+                    <th style="text-align: center;">สุขภาพ</th>
+                    <th>จังหวัด</th>
+                    <th style="text-align: center;">จัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${customers}">
+                    <td>
+                        <div class="name-highlight" th:text="${c.name}">Name</div>
+                        <div class="info-muted">ชื่อเล่น: [[${c.nickname != '' ? c.nickname : '-'}]] | อายุ: [[${c.getAge()}]] ปี</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700;" th:text="${c.occupation}">-</div>
+                        <div th:if="${c.occupation == 'กำลังศึกษา'}">
+                            <span class="tag tag-edu" th:text="${c.education}">ระดับ</span>
+                            <span class="tag tag-major" th:if="${c.major != ''}" th:text="${c.major}">คณะ</span>
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <div th:if="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
+                             style="font-weight: 800; opacity: 0.4; font-size: 1.2rem;">-</div>
+                        <div th:unless="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
+                             style="font-size: 0.9rem; font-weight: 700;">
+                            <div th:if="${c.disease != null && c.disease != '' && c.disease != '-'}" th:text="${c.disease}"></div>
+                            <div th:if="${c.allergy != null && c.allergy != '' && c.allergy != '-'}" style="color: #ef4444;" th:text="'แพ้: ' + ${c.allergy}"></div>
+                        </div>
+                    </td>
+                    <td style="font-weight: 700;" th:text="${c.province}">-</td>
+                    <td>
+                        <div class="action-btns">
+                            <a th:href="@{'/customers/edit/' + ${c.id}}" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a th:href="@{'/customers/delete/' + ${c.id}}" class="btn-del" onclick="return confirm('ลบข้อมูล?')"><i class="fa-solid fa-trash-can"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
