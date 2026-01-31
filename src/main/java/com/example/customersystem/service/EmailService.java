@@ -9,20 +9,18 @@ import java.net.http.HttpResponse;
 @Service
 public class EmailService {
 
-    // ✅ ดึงค่ารหัสจาก Railway Variables
     private final String BREVO_API_KEY = System.getenv("BREVO_API_KEY"); 
 
     public void sendOtpEmail(String email, String otp) {
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Recipient email cannot be null or empty");
+        if (BREVO_API_KEY == null || BREVO_API_KEY.isEmpty()) {
+            throw new RuntimeException("ERROR: BREVO_API_KEY is missing!");
         }
 
-        // ✅ เปลี่ยน email ผู้ส่งจาก a06578001 เป็น sskg82760@gmail.com (เมลของพี่เอง)
         String jsonBody = "{"
                 + "\"sender\":{\"name\":\"GSB Portal\",\"email\":\"sskg82760@gmail.com\"},"
                 + "\"to\":[{\"email\":\"" + email + "\"}],"
                 + "\"subject\":\"Your OTP Code: " + otp + "\","
-                + "\"htmlContent\":\"<html><body><h3>รหัส OTP ของคุณคือ: <b style='color:blue;'>" + otp + "</b></h3><p>รหัสนี้จะหมดอายุใน 5 นาที</p></body></html>\""
+                + "\"htmlContent\":\"<html><body><h3>รหัส OTP ของคุณคือ: <b style='color:blue;'>" + otp + "</b></h3></body></html>\""
                 + "}";
 
         HttpClient client = HttpClient.newHttpClient();
@@ -36,14 +34,12 @@ public class EmailService {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() >= 400) {
-                System.err.println("API Error: " + response.body());
-                throw new RuntimeException("Brevo API Error: " + response.body());
-            } else {
-                System.out.println("✅ ส่งเมลสำเร็จ! ผ่านเมล sskg82760 เรียบร้อย");
+                System.err.println("❌ Error: " + response.body());
+                throw new RuntimeException("Brevo Error: " + response.body());
             }
+            System.out.println("✅ OTP Sent to " + email);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Connection Error: " + e.getMessage());
+            throw new RuntimeException("Fail: " + e.getMessage());
         }
     }
 }
