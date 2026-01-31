@@ -10,14 +10,14 @@ import java.net.http.HttpResponse;
 public class EmailService {
 
     public void sendOtpEmail(String email, String otp) {
-        // ✅ 1. ย้ายมาอ่านค่าข้างในนี้ เพื่อให้มันดึงค่าล่าสุดจาก Render ทุกครั้งที่เรียกใช้
+        // ดึง API Key ทุกครั้งที่เรียกใช้
         String apiKey = System.getenv("BREVO_API_KEY"); 
         
-        System.out.println("DEBUG: กำลังส่งเมลหา -> " + email);
+        System.out.println("🚀 [LOG] เริ่มขั้นตอนส่งเมลหา: " + email);
         
         if (apiKey == null || apiKey.isEmpty()) {
-            System.err.println("❌ ERROR: BREVO_API_KEY หายไปจากระบบ (null/empty)");
-            return; // หยุดทำงานทันทีถ้าไม่มี Key
+            System.err.println("❌ [ERROR] ไม่เจอ BREVO_API_KEY ใน Environment!");
+            return; 
         }
 
         String jsonBody = "{"
@@ -31,24 +31,24 @@ public class EmailService {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
-                    .header("api-key", apiKey) // ✅ ใช้ตัวแปรที่ดึงมาสดๆ
+                    .header("api-key", apiKey)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             
-            // ✅ พ่นผลลัพธ์ออกมาดูเลยว่า Brevo ตอบกลับมาว่าอะไร
-            System.out.println("Brevo Response Code: " + response.statusCode());
-            System.out.println("Brevo Body: " + response.body());
+            // พ่นผลลัพธ์เพื่อวิเคราะห์
+            System.out.println("📡 HTTP Status: " + response.statusCode());
+            System.out.println("📡 Response Body: " + response.body());
 
             if (response.statusCode() >= 400) {
-                System.err.println("❌ Brevo Error: " + response.body());
+                System.err.println("❌ Brevo Rejected: " + response.body());
             } else {
-                System.out.println("✅ OTP Sent Successfully to " + email);
+                System.out.println("✅ [SUCCESS] เมลส่งออกไปเรียบร้อยแล้ว!");
             }
         } catch (Exception e) {
-            System.err.println("❌ Fail to send email: " + e.getMessage());
+            System.err.println("❌ [CRITICAL ERROR]: " + e.getMessage());
             e.printStackTrace();
         }
     }

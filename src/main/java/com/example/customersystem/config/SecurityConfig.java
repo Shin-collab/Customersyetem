@@ -24,25 +24,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable()) // ปิดเพื่อให้ส่ง Form POST ได้ไม่ติดขัด
             .authorizeHttpRequests(auth -> auth
-                // 🛑 อนุญาตให้เข้าถึงหน้า Login, Register และระบบกู้รหัสผ่านทั้งหมดโดยไม่ต้อง Login
                 .requestMatchers(
                     "/login", 
                     "/register", 
-                    "/verify-otp", 
                     "/forgot-password", 
+                    "/verify-otp", 
                     "/verify-forgot-password", 
                     "/reset-password",
-                    "/css/**", 
-                    "/js/**", 
-                    "/img/**"
+                    "/css/**", "/js/**", "/img/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
             .userDetailsService(userDetailsService)
             .formLogin(form -> form
                 .loginPage("/login")
-                // ✅ ใช้ defaultSuccessUrl เพื่อให้ส่งต่อไปที่ Controller หลัง Login สำเร็จเพื่อทำ OTP
                 .defaultSuccessUrl("/login-success", true) 
                 .permitAll()
             )
@@ -52,8 +49,7 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
-            )
-            .csrf(csrf -> csrf.disable()); // ปิด CSRF เพื่อความสะดวกในการพัฒนาระบบหลังบ้าน
+            );
             
         return http.build();
     }
