@@ -10,13 +10,12 @@ import java.net.http.HttpResponse;
 public class EmailService {
 
     public void sendOtpEmail(String email, String otp) {
-        // ดึง API Key ทุกครั้งที่เรียกใช้
         String apiKey = System.getenv("BREVO_API_KEY"); 
         
-        System.out.println("🚀 [LOG] เริ่มขั้นตอนส่งเมลหา: " + email);
+        System.out.println("📡 [EmailService] เริ่มส่งเมลไปที่: " + email);
         
         if (apiKey == null || apiKey.isEmpty()) {
-            System.err.println("❌ [ERROR] ไม่เจอ BREVO_API_KEY ใน Environment!");
+            System.err.println("❌ [Error] BREVO_API_KEY หาย!");
             return; 
         }
 
@@ -38,17 +37,16 @@ public class EmailService {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             
-            // พ่นผลลัพธ์เพื่อวิเคราะห์
-            System.out.println("📡 HTTP Status: " + response.statusCode());
-            System.out.println("📡 Response Body: " + response.body());
+            System.out.println("📡 Brevo Response Status: " + response.statusCode());
+            System.out.println("📡 Brevo Response Body: " + response.body());
 
             if (response.statusCode() >= 400) {
-                System.err.println("❌ Brevo Rejected: " + response.body());
+                System.err.println("❌ [Brevo API Error]: " + response.body());
             } else {
-                System.out.println("✅ [SUCCESS] เมลส่งออกไปเรียบร้อยแล้ว!");
+                System.out.println("✅ [SUCCESS] OTP ส่งเรียบร้อย!");
             }
         } catch (Exception e) {
-            System.err.println("❌ [CRITICAL ERROR]: " + e.getMessage());
+            System.err.println("❌ [Critical Error]: " + e.getMessage());
             e.printStackTrace();
         }
     }
