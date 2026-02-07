@@ -4,110 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gsb-pink: #eb008b; --dark: #1e293b; --error-bg: #fff5f5; --error-text: #c53030; --slate: #64748b; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* --- [ส่วนที่กุแก้: คุมโทน Midnight Cyber & Glassmorphism] --- */
+        :root { 
+            --gsb-pink: #eb008b; 
+            --bg-body: #040508; 
+            --tx: #ffffff;
+            --slate: #94a3b8; 
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s ease; }
         
         body { 
             font-family: 'Sarabun', 'Inter', sans-serif; 
-            background: #f1f5f9; 
+            background-color: var(--bg-body);
+            /* ใส่แสง Ambient เหมือนหน้าอื่นๆ ในระบบ */
+            background-image: radial-gradient(at 0% 100%, rgba(235, 0, 139, 0.1) 0px, transparent 40%),
+                              radial-gradient(at 100% 0%, rgba(235, 0, 139, 0.08) 0px, transparent 40%);
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             padding: 20px;
+            color: var(--tx);
         }
 
+        /* การ์ดลงทะเบียนแบบกระจก (Glassmorphism) */
         .reg-card { 
-            background: #fff; 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             width: 100%; 
-            max-width: 450px; 
-            padding: 40px 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); 
-            border-top: 6px solid var(--gsb-pink);
+            max-width: 480px; 
+            padding: 45px 35px; 
+            border-radius: 35px; 
+            border: 1px solid var(--border);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5); 
         }
 
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h2 { color: var(--dark); font-size: 1.6rem; font-weight: 800; }
+        .header { text-align: center; margin-bottom: 35px; }
+        .header h2 { 
+            color: #fff; font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; 
+            text-shadow: 0 0 15px rgba(235, 0, 139, 0.3);
+        }
         .header span { color: var(--gsb-pink); }
-        .header p { color: var(--slate); font-size: 0.9rem; margin-top: 5px; }
+        .header p { color: var(--slate); font-size: 0.9rem; margin-top: 8px; font-weight: 300; }
         
+        /* Error Alert สไตล์ Modern */
         .alert-error { 
-            background: var(--error-bg); 
-            color: var(--error-text); 
-            padding: 14px; 
-            border-radius: 12px; 
+            background: rgba(239, 68, 68, 0.1); 
+            color: #f87171; 
+            padding: 15px; 
+            border-radius: 15px; 
             margin-bottom: 25px; 
-            border: 1px solid #feb2b2; 
+            border: 1px solid rgba(239, 68, 68, 0.2); 
             font-size: 0.85rem; 
             display: flex; 
             align-items: center; 
             gap: 10px; 
-            font-weight: 600;
+            font-weight: 500;
         }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full { grid-column: span 2; }
         
-        label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; margin-left: 4px; }
+        label { display: block; font-size: 0.85rem; font-weight: 400; color: #cbd5e1; margin-bottom: 10px; margin-left: 5px; }
         
+        /* Input สไตล์ Dark Cyber */
         input { 
             width: 100%; 
-            padding: 12px 15px; 
-            border: 2px solid #e2e8f0; 
-            border-radius: 12px; 
+            padding: 14px 18px; 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
             outline: none; 
-            transition: 0.2s; 
             font-size: 0.95rem;
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
         }
         input:focus { 
             border-color: var(--gsb-pink); 
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); 
+            background: rgba(235, 0, 139, 0.05);
+            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.15); 
         }
 
         .password-container { position: relative; }
         .toggle-password { 
             position: absolute; 
-            right: 15px; 
-            top: 40px; 
+            right: 18px; 
+            top: 45px; 
             cursor: pointer; 
-            color: #94a3b8; 
-            font-size: 1.1rem;
-            transition: 0.2s;
+            color: var(--slate); 
+            font-size: 1rem;
         }
-        .toggle-password:hover { color: var(--gsb-pink); }
+        .toggle-password:hover { color: #fff; }
 
+        /* ปุ่มลงทะเบียนสีชมพูเรืองแสง */
         .btn-reg { 
             width: 100%; 
             background: var(--gsb-pink); 
             color: #fff; 
-            padding: 15px; 
+            padding: 16px; 
             border: none; 
-            border-radius: 12px; 
-            font-weight: 800; 
-            font-size: 1.05rem;
+            border-radius: 18px; 
+            font-weight: 700; 
+            font-size: 1.1rem;
             cursor: pointer; 
-            margin-top: 10px; 
-            transition: 0.3s; 
+            margin-top: 15px; 
+            box-shadow: 0 10px 25px rgba(235, 0, 139, 0.3); 
         }
-        .btn-reg:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(235, 0, 139, 0.4); }
+        .btn-reg:hover { 
+            filter: brightness(1.1);
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 30px rgba(235, 0, 139, 0.4); 
+        }
         .btn-reg:active { transform: translateY(0); }
 
-        .footer { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--slate); font-weight: 600; }
-        .footer a { color: var(--gsb-pink); text-decoration: none; font-weight: 800; margin-left: 5px; }
+        .footer { text-align: center; margin-top: 30px; font-size: 0.9rem; color: var(--slate); font-weight: 300; }
+        .footer a { color: var(--gsb-pink); text-decoration: none; font-weight: 600; margin-left: 5px; }
+        .footer a:hover { text-decoration: underline; }
 
-        /* ปรับปรุงสำหรับหน้าจอมือถือ */
+        /* Responsive Mobile */
         @media (max-width: 480px) {
-            .reg-card { padding: 35px 20px; }
+            .reg-card { padding: 40px 25px; border-radius: 30px; }
             .grid { grid-template-columns: 1fr; gap: 15px; }
             .full { grid-column: span 1; }
-            input, .btn-reg { height: 55px; font-size: 1.1rem; }
-            .toggle-password { top: 43px; }
+            input, .btn-reg { height: 55px; }
+            .toggle-password { top: 46px; }
         }
     </style>
 </head>
@@ -130,30 +156,31 @@
                 <input type="text" name="name" placeholder="ระบุชื่อและนามสกุล" th:value="${user != null ? user.name : ''}" required>
             </div>
             
-            <div class="full-mobile">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="ตั้งชื่อผู้ใช้" th:value="${user != null ? user.username : ''}" required>
+            <div class="full">
+                <label>ชื่อผู้ใช้ (Username)</label>
+                <input type="text" name="username" placeholder="ตั้งชื่อผู้ใช้เพื่อเข้าระบบ" th:value="${user != null ? user.username : ''}" required>
             </div>
             
-            <div class="full-mobile">
-                <label>Email</label>
-                <input type="email" name="email" placeholder="staff@gsb.or.th" th:value="${user != null ? user.email : ''}" required>
+            <div class="full">
+                <label>อีเมลพนักงาน</label>
+                <input type="email" name="email" placeholder="example@gsb.or.th" th:value="${user != null ? user.email : ''}" required>
             </div>
             
             <div class="full password-container">
                 <label>รหัสผ่าน</label>
-                <input type="password" name="password" id="password" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6">
+                <input type="password" name="password" id="password" placeholder="ระบุอย่างน้อย 6 ตัวอักษร" required minlength="6">
                 <i class="fa-solid fa-eye toggle-password" id="eyeIcon"></i>
             </div>
         </div>
         
-        <button type="submit" class="btn-reg">ลงทะเบียนเข้าใช้งาน</button>
+        <button type="submit" class="btn-reg">สร้างบัญชีผู้ใช้</button>
     </form>
     
     <div class="footer">เป็นสมาชิกอยู่แล้ว? <a th:href="@{/login}">เข้าสู่ระบบที่นี่</a></div>
 </div>
 
 <script>
+    // คงสคริปต์สลับการมองเห็นรหัสผ่านไว้เหมือนเดิม
     const eyeIcon = document.getElementById('eyeIcon');
     const passwordInput = document.getElementById('password');
     eyeIcon.addEventListener('click', () => {

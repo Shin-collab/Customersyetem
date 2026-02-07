@@ -4,120 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* --- [ส่วนที่กุแก้: คุมโทน Midnight Pink & Glassmorphism] --- */
         :root {
-            --gsb-pink: #eb008b; --bg-body: #f4f7fa; --bg-nav: #ffffff; --bg-card: #ffffff;
-            --text-main: #1a202c; --text-muted: #718096; --border-color: #edf2f7; --row-hover: #fff5f7;
+            --gsb-pink: #eb008b; 
+            --bg-body: #040508; /* พื้นหลังมืดมิติเดียวกับหน้าโหลด */
+            --bg-nav: rgba(255, 255, 255, 0.02); 
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-main: #ffffff; 
+            --text-muted: #94a3b8; 
+            --border-color: rgba(255, 255, 255, 0.08); 
+            --row-hover: rgba(235, 0, 139, 0.05);
         }
 
-        [data-theme="dark"] {
-            --bg-body: #0f172a; --bg-nav: #1e293b; --bg-card: #1e293b;
-            --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #334155; --row-hover: #25182a;
+        /* สำหรับ Light Mode (ถ้าพี่ยังอยากเก็บไว้) กุจูนให้ดูสะอาดขึ้น */
+        [data-theme="light"] {
+            --bg-body: #f8fafc; --bg-nav: #ffffff; --bg-card: #ffffff;
+            --text-main: #1e293b; --text-muted: #64748b; --border-color: #e2e8f0; --row-hover: #fff5f7;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.2s; }
-        body { font-family: 'Sarabun', sans-serif; background: var(--bg-body); color: var(--text-main); }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s ease; }
+        
+        body { 
+            font-family: 'Sarabun', sans-serif; 
+            background-color: var(--bg-body); 
+            background-image: radial-gradient(at 0% 0%, rgba(235, 0, 139, 0.05) 0px, transparent 40%);
+            color: var(--text-main); 
+            min-height: 100vh;
+        }
 
         nav { 
-            background: var(--bg-nav); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 4px solid var(--gsb-pink); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            background: var(--bg-nav); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 1rem 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid var(--border-color); 
+            position: sticky; top: 0; z-index: 100; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* --- [แก้ใหม่ตรงนี้] ปรับปรุง Responsive สำหรับ iPad/มือถือ --- */
-        @media (max-width: 1024px) {
-            nav { padding: 1rem; flex-direction: column; gap: 15px; text-align: center; }
-            .toolbar { flex-direction: column; align-items: stretch !important; gap: 15px; }
-            .search-container { max-width: 100% !important; }
-            .btn-pink { justify-content: center; }
-
-            /* เปลี่ยนตารางเป็นแบบ Card เมื่อจอเล็ก */
-            .data-table, .data-table thead, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
-            .data-table thead { display: none; } /* ซ่อนหัวตาราง */
-            
-            .data-table tr { 
-                background: var(--bg-card); margin-bottom: 1.5rem; 
-                border-radius: 15px; border: 1px solid var(--border-color); 
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden;
-            }
-            .data-table td { 
-                display: flex; justify-content: space-between; align-items: center; 
-                padding: 12px 15px !important; border-bottom: 1px solid var(--border-color);
-                text-align: right;
-            }
-            .data-table td:last-child { border-bottom: none; background: var(--row-hover); }
-            
-            /* ใช้แอตทริบิวต์ data-label มาแสดงเป็นหัวข้อ */
-            .data-table td::before { 
-                content: attr(data-label); font-weight: 800; color: var(--gsb-pink); 
-                text-align: left; font-size: 0.85rem; flex: 1;
-            }
-            .data-table td > div, .data-table td > span { flex: 2; }
-        }
-
-        .theme-switch-wrapper { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
-        .theme-switch { display: inline-block; height: 24px; position: relative; width: 45px; }
-        .theme-switch input { display:none; }
-        .slider { background-color: #cbd5e0; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
-        .slider:before { background-color: #fff; bottom: 3px; content: ""; height: 18px; left: 4px; position: absolute; transition: .4s; width: 18px; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--gsb-pink); }
-        input:checked + .slider:before { transform: translateX(20px); }
-
+        /* Toolbar & Search */
         .container { max-width: 1240px; margin: 2rem auto; padding: 0 1.5rem; }
         .toolbar { display: flex; justify-content: space-between; margin-bottom: 2rem; align-items: center; gap: 20px; }
         
         .search-container { position: relative; flex: 1; max-width: 450px; }
-        .search-container i { position: absolute; left: 18px; top: 14px; color: var(--gsb-pink); }
+        .search-container i { position: absolute; left: 18px; top: 15px; color: var(--gsb-pink); }
         .search-container input { 
-            width: 100%; padding: 12px 20px 12px 50px; border-radius: 15px; border: 2px solid var(--border-color);
-            background: var(--bg-card); color: var(--text-main); outline: none; font-size: 1rem; font-weight: 600;
+            width: 100%; padding: 14px 20px 14px 50px; border-radius: 15px; 
+            border: 1px solid var(--border-color);
+            background: var(--bg-card); color: var(--text-main); outline: none; font-size: 1rem;
         }
+        .search-container input:focus { border-color: var(--gsb-pink); box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); }
 
-        .data-table { width: 100%; background: var(--bg-card); border-radius: 20px; border-collapse: separate; border-spacing: 0; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .data-table th { background: var(--gsb-pink); color: white; padding: 18px; text-align: left; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; }
-        .data-table td { padding: 18px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        /* การ์ดตารางแบบกระจก */
+        .data-table { 
+            width: 100%; 
+            background: var(--bg-card); 
+            backdrop-filter: blur(10px);
+            border-radius: 25px; 
+            border-collapse: separate; border-spacing: 0; 
+            overflow: hidden; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
+        }
+        
+        .data-table th { 
+            background: rgba(235, 0, 139, 0.1); 
+            color: var(--gsb-pink); 
+            padding: 20px; text-align: left; font-size: 0.85rem; font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table td { padding: 20px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .data-table tr:last-child td { border-bottom: none; }
         .data-table tr:hover { background: var(--row-hover); }
 
-        .name-highlight { font-weight: 800; font-size: 1.1rem; color: var(--gsb-pink); margin-bottom: 4px; }
-        .info-muted { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+        /* Highlight ข้อมูล */
+        .name-highlight { font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
+        .info-muted { font-size: 0.85rem; color: var(--text-muted); font-weight: 300; }
         
-        .tag { padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; display: inline-block; margin-top: 5px; }
-        .tag-edu { background: rgba(0, 150, 255, 0.1); color: #0077cc; }
+        .tag { padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 600; display: inline-block; margin-top: 5px; }
+        .tag-edu { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
         .tag-major { background: rgba(235, 0, 139, 0.1); color: var(--gsb-pink); margin-left: 5px; }
 
-        .btn-pink { background: var(--gsb-pink); color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        
+        /* ปุ่มสีชมพู GSB */
+        .btn-pink { 
+            background: var(--gsb-pink); color: #fff; text-decoration: none; 
+            padding: 14px 28px; border-radius: 15px; font-weight: 700; 
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 8px 20px rgba(235, 0, 139, 0.3);
+        }
+        .btn-pink:hover { transform: translateY(-3px); filter: brightness(1.1); box-shadow: 0 12px 25px rgba(235, 0, 139, 0.4); }
+
         .action-btns { display: flex; gap: 15px; justify-content: center; }
         .btn-edit { color: var(--text-muted); font-size: 1.2rem; }
-        .btn-edit:hover { color: var(--gsb-pink); transform: scale(1.1); }
-        .btn-del { color: #f87171; font-size: 1.2rem; }
+        .btn-edit:hover { color: #fff; transform: scale(1.2); }
+        .btn-del { color: rgba(248, 113, 113, 0.6); font-size: 1.2rem; }
+        .btn-del:hover { color: #f87171; transform: scale(1.2); }
 
-        .logout-btn { background: none; border: none; color: #ef4444; font-weight: 800; cursor: pointer; font-family: 'Sarabun', sans-serif; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
-        .user-section { display: flex; align-items: center; gap: 15px; background: var(--border-color); padding: 5px 15px; border-radius: 20px; }
+        /* สวิตช์เปิดปิดโหมด */
+        .user-section { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 6px 18px; border-radius: 20px; border: 1px solid var(--border-color); }
+        .logout-btn { background: none; border: none; color: #f87171; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+        /* Responsive สำหรับมือถือ (Card View) */
+        @media (max-width: 1024px) {
+            nav { padding: 1rem; flex-direction: column; gap: 15px; }
+            .toolbar { flex-direction: column; align-items: stretch !important; }
+            .search-container { max-width: 100% !important; }
+            
+            .data-table, .data-table thead, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
+            .data-table thead { display: none; }
+            .data-table tr { 
+                background: var(--bg-card); margin-bottom: 1.5rem; border-radius: 20px; 
+                border: 1px solid var(--border-color); overflow: hidden;
+            }
+            .data-table td { display: flex; justify-content: space-between; padding: 15px !important; text-align: right; border-bottom: 1px solid var(--border-color); }
+            .data-table td::before { content: attr(data-label); font-weight: 700; color: var(--gsb-pink); font-size: 0.8rem; text-align: left; }
+        }
+
+        .theme-switch-wrapper { display: flex; align-items: center; gap: 10px; margin-right: 15px; }
+        .theme-switch { display: inline-block; height: 20px; position: relative; width: 40px; }
+        .theme-switch input { display:none; }
+        .slider { background-color: #334155; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: #fff; bottom: 3px; content: ""; height: 14px; left: 3px; position: absolute; transition: .4s; width: 14px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--gsb-pink); }
+        input:checked + .slider:before { transform: translateX(20px); }
     </style>
 </head>
 <body>
 
 <nav>
-    <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">GSB <span style="color: var(--gsb-pink);">PORTAL</span></div>
+    <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; color: #fff;">GSB <span style="color: var(--gsb-pink);">PORTAL</span></div>
     <div style="display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 10px;">
         <div class="theme-switch-wrapper">
-            <i class="fa-solid fa-sun" style="color: #facc15;"></i>
+            <i class="fa-solid fa-sun" style="color: #facc15; font-size: 0.9rem;"></i>
             <label class="theme-switch"><input type="checkbox" id="checkbox" /><div class="slider"></div></label>
-            <i class="fa-solid fa-moon" style="color: #94a3b8;"></i>
+            <i class="fa-solid fa-moon" style="color: #94a3b8; font-size: 0.9rem;"></i>
         </div>
         
         <div class="user-section">
-            <a th:href="@{/profile}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700;">
-                <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" style="width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--gsb-pink); object-fit: cover;">
-                <span th:text="${user.name}" style="font-size: 0.9rem;">User</span>
+            <a th:href="@{/profile}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff; font-weight: 400;">
+                <img th:src="${user.avatar != null ? user.avatar : 'https://ui-avatars.com/api/?name='+user.name+'&background=eb008b&color=fff'}" style="width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--gsb-pink); object-fit: cover;">
+                <span th:text="${user.name}" style="font-size: 0.85rem;">User</span>
             </a>
-            <div style="width: 1px; height: 15px; background: #cbd5e0;"></div>
+            <div style="width: 1px; height: 15px; background: rgba(255,255,255,0.1);"></div>
             <form th:action="@{/logout}" method="post" style="margin: 0;">
                 <button type="submit" class="logout-btn">
-                    <i class="fa-solid fa-right-from-bracket"></i> ออก
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </form>
         </div>
@@ -151,7 +189,7 @@
                         <div class="info-muted">ชื่อเล่น: [[${c.nickname != '' ? c.nickname : '-'}]] | อายุ: [[${c.getAge()}]] ปี</div>
                     </td>
                     <td data-label="อาชีพ / การศึกษา">
-                        <div style="font-weight: 700;" th:text="${c.occupation}">-</div>
+                        <div style="font-weight: 600;" th:text="${c.occupation}">-</div>
                         <div th:if="${c.occupation == 'กำลังศึกษา'}">
                             <span class="tag tag-edu" th:text="${c.education}">ระดับ</span>
                             <span class="tag tag-major" th:if="${c.major != ''}" th:text="${c.major}">คณะ</span>
@@ -159,14 +197,14 @@
                     </td>
                     <td data-label="สุขภาพ" style="text-align: center;">
                         <div th:if="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
-                             style="font-weight: 800; opacity: 0.4;">-</div>
+                             style="opacity: 0.2;">-</div>
                         <div th:unless="${(c.disease == null || c.disease == '' || c.disease == '-') && (c.allergy == null || c.allergy == '' || c.allergy == '-')}" 
-                             style="font-size: 0.9rem; font-weight: 700;">
+                             style="font-size: 0.85rem;">
                             <div th:if="${c.disease != null && c.disease != '' && c.disease != '-'}" th:text="${c.disease}"></div>
-                            <div th:if="${c.allergy != null && c.allergy != '' && c.allergy != '-'}" style="color: #ef4444;" th:text="'แพ้: ' + ${c.allergy}"></div>
+                            <div th:if="${c.allergy != null && c.allergy != '' && c.allergy != '-'}" style="color: #f87171;" th:text="'แพ้: ' + ${c.allergy}"></div>
                         </div>
                     </td>
-                    <td data-label="จังหวัด" style="font-weight: 700;" th:text="${c.province}">-</td>
+                    <td data-label="จังหวัด" style="font-weight: 400; color: #cbd5e1;" th:text="${c.province}">-</td>
                     <td data-label="จัดการ">
                         <div class="action-btns">
                             <a th:href="@{'/customers/edit/' + ${c.id}}" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></a>
@@ -180,6 +218,7 @@
 </div>
 
 <script>
+    // สคริปต์เดิมของพี่ กุไม่แตะเลยครับ
     function search() {
         let v = document.getElementById("q").value.toUpperCase();
         document.querySelectorAll("#customerTable tbody tr").forEach(r => {

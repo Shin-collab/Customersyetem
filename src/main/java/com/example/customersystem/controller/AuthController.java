@@ -63,7 +63,6 @@ public class AuthController {
             session.setAttribute("OTP_CODE", otp);
             session.setAttribute("PENDING_USER", user);
             
-            // ✅ เรียกส่งเมล
             emailService.sendOtpEmail(targetEmail, otp);
             
             return "redirect:/verify-otp";
@@ -81,11 +80,15 @@ public class AuthController {
         return "register";
     }
 
+    // ✅ แก้จุดที่ 1: หลังลงทะเบียนสำเร็จ
     @PostMapping("/register")
     public String registerUser(User user, Model model) {
         try {
             userService.saveUser(user);
-            return "redirect:/login?registered=true"; 
+            // เดิม: return "redirect:/login?registered=true";
+            model.addAttribute("title", "ลงทะเบียนสำเร็จ");
+            model.addAttribute("message", "บัญชีของคุณถูกสร้างเรียบร้อยแล้ว กรุณาใช้ชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ");
+            return "success"; 
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("user", user);
@@ -156,15 +159,19 @@ public class AuthController {
         return "reset-password";
     }
 
+    // ✅ แก้จุดที่ 2: หลังตั้งรหัสผ่านใหม่สำเร็จ
     @PostMapping("/reset-password")
-    public String handleResetPassword(@RequestParam String newPassword, HttpSession session) {
+    public String handleResetPassword(@RequestParam String newPassword, HttpSession session, Model model) {
         String email = (String) session.getAttribute("FORGOT_USER_EMAIL");
         User user = userService.findByEmail(email);
         if (user != null) {
             user.setPassword(newPassword); 
             userService.saveUser(user); 
             session.invalidate(); 
-            return "redirect:/login?passwordReset=true";
+            // เดิม: return "redirect:/login?passwordReset=true";
+            model.addAttribute("title", "เปลี่ยนรหัสผ่านสำเร็จ");
+            model.addAttribute("message", "ระบบได้อัปเดตรหัสผ่านใหม่ของคุณแล้ว กรุณาเข้าสู่ระบบอีกครั้ง");
+            return "success";
         }
         return "redirect:/login";
     }
@@ -183,6 +190,7 @@ public class AuthController {
     @GetMapping("/verify-change-password")
     public String viewVerifyChangeOtpPage() { return "verify-change-password"; }
 
+    // ✅ แก้จุดที่ 3: หลังเปลี่ยนรหัสผ่าน (กรณีล็อกอินอยู่แล้ว)
     @PostMapping("/verify-change-password")
     public String verifyChangePassword(@RequestParam String otp, HttpSession session, Authentication authentication, Model model) {
         String sessionOtp = (String) session.getAttribute("CHANGE_PASS_OTP");
@@ -191,7 +199,10 @@ public class AuthController {
             user.setPassword((String) session.getAttribute("NEW_PASSWORD_TEMP"));
             userService.saveUser(user);
             session.removeAttribute("CHANGE_PASS_OTP");
-            return "redirect:/login?passwordChanged=true";
+            // เดิม: return "redirect:/login?passwordChanged=true";
+            model.addAttribute("title", "อัปเดตรหัสผ่านสำเร็จ");
+            model.addAttribute("message", "ระบบได้ทำการเปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว");
+            return "success";
         }
         model.addAttribute("error", "รหัส OTP ไม่ถูกต้อง");
         return "verify-change-password";
