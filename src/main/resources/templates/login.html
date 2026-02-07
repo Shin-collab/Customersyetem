@@ -3,262 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Login | GSB Portal System</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
     <style>
-        :root { 
-            --pk: #eb008b; 
-            --bg: #f1f5f9;
-            --cd: #ffffff;
-            --tx: #0f172a;
-            --label: #334155;
-            --bd: #cbd5e1;
-            --in: #ffffff;
-        }
-        
-        [data-theme="dark"] { 
-            --bg: #040508; 
-            --cd: #111827; 
-            --tx: #f8fafc; 
-            --label: #cbd5e1;
-            --bd: #374151; 
-            --in: #1f2937;
+        :root {
+            --primary: #eb008b;
+            --primary-hover: #c40076;
+            --primary-light: rgba(235, 0, 139, 0.1);
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-label: #475569;
+            --border-color: #cbd5e1;
+            --input-bg: #ffffff;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: 'Sarabun', sans-serif; 
-            /* แก้ไข: ปรับระยะห่างตัวอักษรส่วนกลางให้ชิดขึ้นเล็กน้อย */
-            letter-spacing: -0.3px;
-            transition: background 0.2s, color 0.2s, border 0.2s; 
-        }
-        
-        body { 
-            background-color: var(--bg);
-            background-image: radial-gradient(at 0% 0%, rgba(235, 0, 139, 0.05) 0px, transparent 40%);
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 20px;
-            color: var(--tx);
+        [data-theme="dark"] {
+            --bg-body: #020617;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-label: #94a3b8;
+            --border-color: #334155;
+            --input-bg: #0f172a;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .login-card { 
-            background: var(--cd); 
-            width: 100%; 
-            max-width: 420px; 
-            padding: 50px 40px; 
-            border-radius: 24px; 
-            border: 1px solid var(--bd);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+            /* แก้ไข: ระยะห่างตัวอักษรเอาตามหน้า KYC เป๊ะๆ ไม่ถ่าง */
+            letter-spacing: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
             position: relative;
+        }
+
+        /* พื้นหลังแบบมีลูกเล่น (Animated Background) */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            top: -250px;
+            left: -250px;
+            z-index: -1;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            bottom: -200px;
+            right: -200px;
+            z-index: -1;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
             z-index: 10;
         }
 
-        .logo { text-align: center; margin-bottom: 40px; }
-        .logo h1 { 
-            font-weight: 800; 
-            font-size: 2.2rem; 
-            color: var(--tx); 
-            /* แก้ไข: บีบตัวอักษร Logo ให้ดูแน่นแบบ Brand Identity */
-            letter-spacing: -1.5px; 
-            line-height: 1;
-        }
-        .logo span { color: var(--pk); }
-        .logo p { 
-            color: var(--label); 
-            font-size: 0.9rem; 
-            margin-top: 8px; 
-            font-weight: 400;
-            /* แก้ไข: ปรับให้คำอธิบายไม่อ้าจนเกินไป */
-            letter-spacing: 0px; 
+        .login-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 28px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
         }
 
-        .alert { 
-            padding: 15px; 
-            border-radius: 12px; 
-            font-size: 0.85rem; 
-            margin-bottom: 25px; 
-            text-align: center; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
+        /* --- LOGO SECTION --- */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-section h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -1.5px;
+            margin-bottom: 5px;
+        }
+
+        .logo-section h1 span {
+            color: var(--primary);
+        }
+
+        .logo-section p {
+            color: var(--text-label);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        /* --- ALERTS --- */
+        .alert-box {
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInDown 0.5s;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .alert-info {
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        /* --- FORM GROUPS (แก้ไขระยะห่างที่มึงด่า) --- */
+        .form-group {
+            margin-bottom: 20px; /* ลดระยะห่างให้ชิดพอดี */
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-label);
+            font-size: 0.9rem;
             font-weight: 600;
         }
-        .alert-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .alert-info { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
 
-        .input-group { margin-bottom: 25px; position: relative; }
-        .input-group i.main-icon { 
-            position: absolute; 
-            left: 18px; 
-            top: 45px; 
-            color: var(--pk); 
-            font-size: 1rem; 
-        }
-        
-        label { 
-            display: block; 
-            font-size: 0.9rem; 
-            font-weight: 600; 
-            color: var(--label); 
-            margin-bottom: 10px;
-            /* แก้ไข: ให้ Label ชิดปกติอ่านง่าย */
-            letter-spacing: -0.2px;
-        }
-        
-        input { 
-            width: 100%; 
-            padding: 15px 45px 15px 48px; 
-            border: 2px solid var(--bd); 
-            border-radius: 12px; 
-            outline: none; 
-            font-size: 1rem;
-            color: var(--tx);
-            background: var(--in);
+        .input-wrapper {
             position: relative;
-            z-index: 20;
-            /* แก้ไข: ป้องกันตัวอักษรในช่องกรอกห่างกันเกินไป */
-            letter-spacing: 0px;
-        }
-        input:focus { 
-            border-color: var(--pk); 
-            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); 
+            display: flex;
+            align-items: center;
         }
 
-        .toggle-password { 
-            position: absolute; 
-            right: 18px; 
-            top: 45px; 
-            cursor: pointer; 
-            color: var(--label); 
-            z-index: 30; 
+        .input-wrapper i.main-icon {
+            position: absolute;
+            left: 16px;
+            color: var(--primary);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* แก้จุดตาย: Padding ซ้าย (50px) เพื่อไม่ให้ตัวหนังสือทับ Icon */
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 50px; 
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            color: var(--text-main);
             font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
         }
 
-        .btn-login { 
-            width: 100%; 
-            background: var(--pk); 
-            color: #ffffff !important; 
-            padding: 16px; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 1.1rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            margin-top: 10px; 
-            box-shadow: 0 4px 14px 0 rgba(235, 0, 139, 0.39);
-            transition: 0.2s;
-            /* แก้ไข: บีบตัวหนังสือบนปุ่มให้ดู Strong */
-            letter-spacing: -0.5px;
-        }
-        .btn-login:hover { 
-            filter: brightness(1.1);
-            transform: translateY(-2px); 
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
         }
 
-        .forgot-link { text-align: right; margin-top: 15px; }
-        .forgot-link a { color: var(--label); font-size: 0.85rem; text-decoration: none; font-weight: 600; }
-        .forgot-link a:hover { color: var(--pk); }
-
-        .footer-text { text-align: center; margin-top: 35px; font-size: 0.9rem; color: var(--label); }
-        .footer-text a { color: var(--pk); text-decoration: none; font-weight: 700; margin-left: 5px; }
-
-        .tgl { 
-            position: fixed; 
-            top: 20px; 
-            right: 20px; 
-            cursor: pointer; 
-            color: var(--pk); 
-            z-index: 1000; 
-            background: var(--cd); 
-            width: 45px; 
-            height: 45px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 50%; 
-            border: 2px solid var(--bd);
+        .input-wrapper input:focus + i {
+            transform: scale(1.1);
         }
 
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            cursor: pointer;
+            color: var(--text-label);
+            transition: color 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(235, 0, 139, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -5px rgba(235, 0, 139, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* --- LINKS --- */
+        .options-link {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+
+        .options-link a {
+            color: var(--text-label);
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .options-link a:hover {
+            color: var(--primary);
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--text-label);
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        /* --- THEME TOGGLE --- */
+        .theme-switch {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch:hover {
+            transform: rotate(30deg);
+        }
+
+        /* Responsive */
         @media (max-width: 480px) {
-            .login-card { padding: 35px 25px; }
+            .login-card {
+                padding: 30px 20px;
+            }
+            .logo-section h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="tgl" onclick="setT()">
-    <i class="fa-solid fa-circle-half-stroke"></i>
-</div>
-
-<div class="login-card">
-    <div class="logo">
-        <h1>GSB <span>PORTAL</span></h1>
-        <p>Customer Service System</p>
+    <div class="theme-switch" onclick="toggleTheme()" id="themeBtn">
+        <i class="fa-solid fa-moon"></i>
     </div>
 
-    <div th:if="${param.error}" class="alert alert-error">
-        <i class="fa-solid fa-circle-exclamation"></i> ข้อมูลไม่ถูกต้อง
-    </div>
-    <div th:if="${param.logout}" class="alert alert-info">
-        <i class="fa-solid fa-circle-check"></i> ออกจากระบบแล้ว
-    </div>
-    <div th:if="${param.registered}" class="alert alert-info">
-        <i class="fa-solid fa-face-smile"></i> ลงทะเบียนสำเร็จ!
-    </div>
-    <div th:if="${param.passwordReset}" class="alert alert-info">
-        <i class="fa-solid fa-key"></i> เปลี่ยนรหัสผ่านแล้ว
-    </div>
+    <div class="login-container animate__animated animate__zoomIn">
+        <div class="login-card">
+            
+            <div class="logo-section">
+                <h1>GSB <span>PORTAL</span></h1>
+                <p>Customer Service Management System</p>
+            </div>
 
-    <form th:action="@{/login}" method="post">
-        <div class="input-group">
-            <label>ชื่อผู้ใช้ / อีเมล</label>
-            <i class="fa-solid fa-user main-icon"></i>
-            <input type="text" name="username" placeholder="กรอกชื่อผู้ใช้ของคุณ" required autofocus>
+            <div th:if="${param.error}" class="alert-box alert-error">
+                <i class="fa-solid fa-circle-exclamation"></i> ข้อมูลไม่ถูกต้อง โปรดลองอีกครั้ง
+            </div>
+            
+            <div th:if="${param.logout}" class="alert-box alert-info">
+                <i class="fa-solid fa-circle-info"></i> ออกจากระบบเรียบร้อยแล้ว
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                
+                <div class="form-group">
+                    <label>ชื่อผู้ใช้ หรือ อีเมล</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user main-icon"></i>
+                        <input type="text" name="username" placeholder="กรอกชื่อผู้ใช้ของคุณ" required autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>รหัสผ่าน</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock main-icon"></i>
+                        <input type="password" name="password" id="password" placeholder="กรอกรหัสผ่านของคุณ" required>
+                        <i class="fa-solid fa-eye toggle-password" id="togglePass"></i>
+                    </div>
+                </div>
+
+                <div class="options-link">
+                    <a th:href="@{/forgot-password}">ลืมรหัสผ่านใช่หรือไม่?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    เข้าสู่ระบบ <i class="fa-solid fa-right-to-bracket" style="margin-left: 8px;"></i>
+                </button>
+
+            </form>
+
+            <div class="footer-links">
+                ยังไม่มีบัญชีผู้ใช้? <a th:href="@{/register}">สร้างบัญชีใหม่</a>
+            </div>
+
         </div>
-
-        <div class="input-group">
-            <label>รหัสผ่าน</label>
-            <i class="fa-solid fa-lock main-icon"></i>
-            <input type="password" name="password" id="login-password" placeholder="กรอกรหัสผ่านของคุณ" required>
-            <i class="fa-solid fa-eye toggle-password" id="eyeIcon"></i>
-        </div>
-
-        <button type="submit" class="btn-login">เข้าสู่ระบบ</button>
-    </form>
-
-    <div class="forgot-link">
-        <a th:href="@{/forgot-password}">ลืมรหัสผ่านใช่หรือไม่?</a>
     </div>
 
-    <div class="footer-text">
-        ยังไม่มีบัญชีผู้ใช้? <a th:href="@{/register}">สร้างบัญชีใหม่</a>
-    </div>
-</div>
+    <script>
+        // ระบบจัดการ Theme
+        const themeBtn = document.getElementById('themeBtn');
+        const icon = themeBtn.querySelector('i');
 
-<script>
-    const setT = () => {
-        const html = document.documentElement;
-        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-    };
-    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', targetTheme);
+            localStorage.setItem('theme', targetTheme);
+            updateIcon(targetTheme);
+        }
 
-    const eyeIcon = document.getElementById('eyeIcon');
-    const passwordInput = document.getElementById('login-password');
-    eyeIcon.addEventListener('click', () => {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        eyeIcon.classList.toggle('fa-eye');
-        eyeIcon.classList.toggle('fa-eye-slash');
-    });
-</script>
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                icon.className = 'fa-solid fa-moon';
+            }
+        }
+
+        // โหลด Theme จาก LocalStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        // ระบบ Show/Hide Password
+        const togglePass = document.getElementById('togglePass');
+        const passwordInput = document.getElementById('password');
+
+        togglePass.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            togglePass.classList.toggle('fa-eye');
+            togglePass.classList.toggle('fa-eye-slash');
+        });
+
+        // ฟังก์ชันตกแต่งเพิ่มเติม: ป้องกันการกด Submit ซ้ำ
+        document.querySelector('form').addEventListener('submit', function() {
+            const btn = this.querySelector('.btn-submit');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังตรวจสอบ...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+        });
+    </script>
 </body>
 </html>
