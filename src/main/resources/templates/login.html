@@ -31,6 +31,8 @@
             margin: 0; 
             padding: 0; 
             font-family: 'Sarabun', sans-serif; 
+            /* แก้ไข: ปรับระยะห่างตัวอักษรส่วนกลางให้ชิดขึ้นเล็กน้อย */
+            letter-spacing: -0.3px;
             transition: background 0.2s, color 0.2s, border 0.2s; 
         }
         
@@ -60,16 +62,20 @@
         .logo { text-align: center; margin-bottom: 40px; }
         .logo h1 { 
             font-weight: 800; 
-            font-size: 2rem; 
+            font-size: 2.2rem; 
             color: var(--tx); 
-            letter-spacing: -1px; 
+            /* แก้ไข: บีบตัวอักษร Logo ให้ดูแน่นแบบ Brand Identity */
+            letter-spacing: -1.5px; 
+            line-height: 1;
         }
         .logo span { color: var(--pk); }
         .logo p { 
             color: var(--label); 
             font-size: 0.9rem; 
             margin-top: 8px; 
-            font-weight: 400; 
+            font-weight: 400;
+            /* แก้ไข: ปรับให้คำอธิบายไม่อ้าจนเกินไป */
+            letter-spacing: 0px; 
         }
 
         .alert { 
@@ -101,7 +107,9 @@
             font-size: 0.9rem; 
             font-weight: 600; 
             color: var(--label); 
-            margin-bottom: 10px; 
+            margin-bottom: 10px;
+            /* แก้ไข: ให้ Label ชิดปกติอ่านง่าย */
+            letter-spacing: -0.2px;
         }
         
         input { 
@@ -115,6 +123,8 @@
             background: var(--in);
             position: relative;
             z-index: 20;
+            /* แก้ไข: ป้องกันตัวอักษรในช่องกรอกห่างกันเกินไป */
+            letter-spacing: 0px;
         }
         input:focus { 
             border-color: var(--pk); 
@@ -144,6 +154,8 @@
             margin-top: 10px; 
             box-shadow: 0 4px 14px 0 rgba(235, 0, 139, 0.39);
             transition: 0.2s;
+            /* แก้ไข: บีบตัวหนังสือบนปุ่มให้ดู Strong */
+            letter-spacing: -0.5px;
         }
         .btn-login:hover { 
             filter: brightness(1.1);
