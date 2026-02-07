@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- [ส่วนที่กุแก้: คุมโทน Midnight Cyber & Glassmorphism] --- */
         :root { 
-            --gsb-pink: #eb008b; 
-            --bg-body: #040508; 
-            --tx: #ffffff;
-            --slate: #94a3b8; 
-            --card-bg: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.08);
+            --pk: #eb008b; 
+            --bg: #f1f5f9;
+            --cd: #ffffff;
+            --tx: #0f172a;
+            --lb: #334155;
+            --bd: #cbd5e1;
+            --in: #ffffff;
+        }
+        
+        [data-theme="dark"] { 
+            --bg: #040508; 
+            --cd: #111827; 
+            --tx: #f8fafc; 
+            --lb: #cbd5e1;
+            --bd: #374151; 
+            --in: #1f2937;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; transition: 0.2s; }
         
         body { 
-            font-family: 'Sarabun', 'Inter', sans-serif; 
-            background-color: var(--bg-body);
-            /* ใส่แสง Ambient เหมือนหน้าอื่นๆ ในระบบ */
-            background-image: radial-gradient(at 0% 100%, rgba(235, 0, 139, 0.1) 0px, transparent 40%),
-                              radial-gradient(at 100% 0%, rgba(235, 0, 139, 0.08) 0px, transparent 40%);
+            background-color: var(--bg);
+            background-image: radial-gradient(at 100% 0%, rgba(235, 0, 139, 0.05) 0px, transparent 40%);
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
@@ -33,111 +39,101 @@
             color: var(--tx);
         }
 
-        /* การ์ดลงทะเบียนแบบกระจก (Glassmorphism) */
         .reg-card { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--cd); 
             width: 100%; 
             max-width: 480px; 
             padding: 45px 35px; 
-            border-radius: 35px; 
-            border: 1px solid var(--border);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5); 
+            border-radius: 24px; 
+            border: 1px solid var(--bd);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .header { text-align: center; margin-bottom: 35px; }
-        .header h2 { 
-            color: #fff; font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; 
-            text-shadow: 0 0 15px rgba(235, 0, 139, 0.3);
-        }
-        .header span { color: var(--gsb-pink); }
-        .header p { color: var(--slate); font-size: 0.9rem; margin-top: 8px; font-weight: 300; }
+        .header h2 { font-weight: 800; font-size: 1.8rem; color: var(--tx); letter-spacing: -1px; }
+        .header span { color: var(--pk); }
+        .header p { color: var(--lb); font-size: 0.9rem; margin-top: 8px; font-weight: 400; }
         
-        /* Error Alert สไตล์ Modern */
         .alert-error { 
             background: rgba(239, 68, 68, 0.1); 
-            color: #f87171; 
+            color: #ef4444; 
             padding: 15px; 
-            border-radius: 15px; 
+            border-radius: 12px; 
             margin-bottom: 25px; 
             border: 1px solid rgba(239, 68, 68, 0.2); 
             font-size: 0.85rem; 
             display: flex; 
             align-items: center; 
             gap: 10px; 
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .full { grid-column: span 2; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         
-        label { display: block; font-size: 0.85rem; font-weight: 400; color: #cbd5e1; margin-bottom: 10px; margin-left: 5px; }
+        label { display: block; font-size: 0.9rem; font-weight: 700; color: var(--lb); margin-bottom: 10px; }
         
-        /* Input สไตล์ Dark Cyber */
         input { 
             width: 100%; 
             padding: 14px 18px; 
-            border: 1px solid var(--border); 
-            border-radius: 16px; 
+            border: 2px solid var(--bd); 
+            border-radius: 12px; 
             outline: none; 
-            font-size: 0.95rem;
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            font-size: 1rem;
+            background: var(--in);
+            color: var(--tx);
         }
         input:focus { 
-            border-color: var(--gsb-pink); 
-            background: rgba(235, 0, 139, 0.05);
-            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.15); 
+            border-color: var(--pk); 
+            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); 
         }
 
         .password-container { position: relative; }
         .toggle-password { 
             position: absolute; 
             right: 18px; 
-            top: 45px; 
+            top: 46px; 
             cursor: pointer; 
-            color: var(--slate); 
-            font-size: 1rem;
+            color: var(--lb); 
+            font-size: 1.1rem;
+            z-index: 10;
         }
-        .toggle-password:hover { color: #fff; }
 
-        /* ปุ่มลงทะเบียนสีชมพูเรืองแสง */
         .btn-reg { 
             width: 100%; 
-            background: var(--gsb-pink); 
-            color: #fff; 
+            background: var(--pk); 
+            color: #ffffff !important; 
             padding: 16px; 
             border: none; 
-            border-radius: 18px; 
+            border-radius: 12px; 
             font-weight: 700; 
             font-size: 1.1rem;
             cursor: pointer; 
-            margin-top: 15px; 
-            box-shadow: 0 10px 25px rgba(235, 0, 139, 0.3); 
+            margin-top: 25px; 
+            box-shadow: 0 4px 14px 0 rgba(235, 0, 139, 0.39);
         }
-        .btn-reg:hover { 
-            filter: brightness(1.1);
-            transform: translateY(-3px); 
-            box-shadow: 0 15px 30px rgba(235, 0, 139, 0.4); 
+        .btn-reg:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        .footer { text-align: center; margin-top: 30px; font-size: 0.95rem; color: var(--lb); }
+        .footer a { color: var(--pk); text-decoration: none; font-weight: 700; margin-left: 5px; }
+
+        .tgl { 
+            position: fixed; top: 20px; right: 20px; cursor: pointer; color: var(--pk); 
+            z-index: 1000; background: var(--cd); width: 45px; height: 45px; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; border: 2px solid var(--bd);
         }
-        .btn-reg:active { transform: translateY(0); }
 
-        .footer { text-align: center; margin-top: 30px; font-size: 0.9rem; color: var(--slate); font-weight: 300; }
-        .footer a { color: var(--gsb-pink); text-decoration: none; font-weight: 600; margin-left: 5px; }
-        .footer a:hover { text-decoration: underline; }
-
-        /* Responsive Mobile */
         @media (max-width: 480px) {
-            .reg-card { padding: 40px 25px; border-radius: 30px; }
-            .grid { grid-template-columns: 1fr; gap: 15px; }
-            .full { grid-column: span 1; }
-            input, .btn-reg { height: 55px; }
-            .toggle-password { top: 46px; }
+            .reg-card { padding: 35px 20px; }
         }
     </style>
 </head>
 <body>
+
+<div class="tgl" onclick="setT()">
+    <i class="fa-solid fa-circle-half-stroke"></i>
+</div>
+
 <div class="reg-card">
     <div class="header">
         <h2>สร้างบัญชี <span>พนักงาน</span></h2>
@@ -151,22 +147,22 @@
 
     <form th:action="@{/register}" method="post">
         <div class="grid">
-            <div class="full">
+            <div>
                 <label>ชื่อ-นามสกุล</label>
                 <input type="text" name="name" placeholder="ระบุชื่อและนามสกุล" th:value="${user != null ? user.name : ''}" required>
             </div>
             
-            <div class="full">
+            <div>
                 <label>ชื่อผู้ใช้ (Username)</label>
                 <input type="text" name="username" placeholder="ตั้งชื่อผู้ใช้เพื่อเข้าระบบ" th:value="${user != null ? user.username : ''}" required>
             </div>
             
-            <div class="full">
+            <div>
                 <label>อีเมลพนักงาน</label>
                 <input type="email" name="email" placeholder="example@gsb.or.th" th:value="${user != null ? user.email : ''}" required>
             </div>
             
-            <div class="full password-container">
+            <div class="password-container">
                 <label>รหัสผ่าน</label>
                 <input type="password" name="password" id="password" placeholder="ระบุอย่างน้อย 6 ตัวอักษร" required minlength="6">
                 <i class="fa-solid fa-eye toggle-password" id="eyeIcon"></i>
@@ -180,7 +176,14 @@
 </div>
 
 <script>
-    // คงสคริปต์สลับการมองเห็นรหัสผ่านไว้เหมือนเดิม
+    const setT = () => {
+        const html = document.documentElement;
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+    };
+    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
     const eyeIcon = document.getElementById('eyeIcon');
     const passwordInput = document.getElementById('password');
     eyeIcon.addEventListener('click', () => {

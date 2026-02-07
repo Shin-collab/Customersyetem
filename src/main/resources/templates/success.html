@@ -4,39 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Success | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gsb-pink: #eb008b; --bg: #040508; }
+        :root { 
+            --pk: #eb008b; 
+            --bg: #040508; 
+            --cd: rgba(255, 255, 255, 0.03); 
+            --tx: #ffffff; 
+            --lb: #94a3b8; 
+            --bd: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; }
+        
         body { 
-            font-family: 'Sarabun', sans-serif; background-color: var(--bg);
-            background-image: radial-gradient(circle at center, rgba(235, 0, 139, 0.1) 0%, transparent 70%);
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #fff;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at center, rgba(235, 0, 139, 0.12) 0%, transparent 70%);
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--tx);
         }
+
         .card { 
-            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px);
-            padding: 50px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; width: 90%; max-width: 400px;
+            background: var(--cd); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 60px 35px; 
+            border-radius: 35px; 
+            border: 1px solid var(--bd);
+            text-align: center; 
+            width: 90%; 
+            max-width: 420px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .icon { 
-            width: 80px; height: 80px; background: rgba(235, 0, 139, 0.1);
-            color: var(--gsb-pink); border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; font-size: 2.5rem;
-            margin: 0 auto 25px; border: 2px solid var(--gsb-pink);
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        h2 { margin-bottom: 10px; font-weight: 700; color: white; }
-        p { color: #94a3b8; margin-bottom: 30px; line-height: 1.5; }
+
+        .icon-box {
+            width: 90px; height: 90px;
+            background: rgba(235, 0, 139, 0.1);
+            color: var(--pk);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 30px;
+            border: 2px solid var(--pk);
+            box-shadow: 0 0 25px rgba(235, 0, 139, 0.4);
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h2 { 
+            margin-bottom: 12px; 
+            font-weight: 800; 
+            font-size: 1.8rem; 
+            color: #fff;
+            text-shadow: 0 0 15px rgba(235, 0, 139, 0.3);
+        }
+
+        p { color: var(--lb); margin-bottom: 40px; line-height: 1.6; font-size: 1.05rem; font-weight: 300; }
+
         .btn { 
-            display: block; background: var(--gsb-pink); color: #fff; 
-            padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700;
+            display: block; 
+            width: 100%;
+            background: var(--pk); 
+            color: #ffffff !important; 
+            padding: 18px; 
+            border-radius: 18px; 
+            text-decoration: none; 
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(235, 0, 139, 0.3);
+            transition: 0.3s;
         }
+        
+        .btn:hover { 
+            transform: translateY(-3px); 
+            filter: brightness(1.1);
+            box-shadow: 0 15px 30px rgba(235, 0, 139, 0.4);
+        }
+
+        .btn:active { transform: translateY(-1px); }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="icon"><i class="fa-solid fa-check"></i></div>
+        <div class="icon-box">
+            <i class="fa-solid fa-check"></i>
+        </div>
         <h2 th:text="${title}">ดำเนินการสำเร็จ</h2>
-        <p th:text="${message}">ระบบบันทึกข้อมูลเรียบร้อยแล้ว</p>
+        <p th:text="${message}">ระบบบันทึกข้อมูลและอัปเดตสถานะของคุณเรียบร้อยแล้ว</p>
         <a th:href="@{/login}" class="btn">กลับหน้า login</a>
     </div>
 </body>

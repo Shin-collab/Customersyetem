@@ -4,25 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | GSB Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- [ส่วนที่กุแก้: คุมโทน Midnight Cyber & Glassmorphism] --- */
         :root { 
-            --gsb-pink: #eb008b; 
-            --bg-body: #040508; 
-            --tx: #ffffff;
-            --slate: #94a3b8; 
+            --pk: #eb008b; 
+            --bg: #f1f5f9;
+            --cd: #ffffff;
+            --tx: #0f172a;
+            --label: #334155;
+            --bd: #cbd5e1;
+            --in: #ffffff;
+        }
+        
+        [data-theme="dark"] { 
+            --bg: #040508; 
+            --cd: #111827; 
+            --tx: #f8fafc; 
+            --label: #cbd5e1;
+            --bd: #374151; 
+            --in: #1f2937;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s ease; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Sarabun', sans-serif; 
+            transition: background 0.2s, color 0.2s, border 0.2s; 
+        }
         
         body { 
-            font-family: 'Sarabun', 'Inter', sans-serif; 
-            background-color: var(--bg-body);
-            /* ใส่ลูกเล่นแสง Ambient สีชมพูที่มุมจอ */
-            background-image: radial-gradient(at 0% 0%, rgba(235, 0, 139, 0.1) 0px, transparent 40%),
-                              radial-gradient(at 100% 100%, rgba(235, 0, 139, 0.08) 0px, transparent 40%);
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(235, 0, 139, 0.05) 0px, transparent 40%);
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
@@ -31,103 +45,145 @@
             color: var(--tx);
         }
 
-        /* การ์ดกระจกนวลตา (Glassmorphism) */
         .login-card { 
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: var(--cd); 
             width: 100%; 
             max-width: 420px; 
             padding: 50px 40px; 
-            border-radius: 35px; 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6); 
+            border-radius: 24px; 
+            border: 1px solid var(--bd);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
         }
 
         .logo { text-align: center; margin-bottom: 40px; }
         .logo h1 { 
-            font-weight: 800; font-size: 2rem; color: #fff; letter-spacing: -1px; 
-            text-shadow: 0 0 20px rgba(235, 0, 139, 0.4);
+            font-weight: 800; 
+            font-size: 2rem; 
+            color: var(--tx); 
+            letter-spacing: -1px; 
         }
-        .logo span { color: var(--gsb-pink); }
-        .logo p { color: var(--slate); font-size: 0.9rem; margin-top: 8px; font-weight: 300; letter-spacing: 1px; }
+        .logo span { color: var(--pk); }
+        .logo p { 
+            color: var(--label); 
+            font-size: 0.9rem; 
+            margin-top: 8px; 
+            font-weight: 400; 
+        }
 
-        /* การแจ้งเตือนแบบ Modern */
         .alert { 
-            padding: 15px; border-radius: 15px; font-size: 0.85rem; 
-            margin-bottom: 25px; text-align: center; 
-            display: flex; align-items: center; justify-content: center; gap: 10px; 
-            font-weight: 500;
+            padding: 15px; 
+            border-radius: 12px; 
+            font-size: 0.85rem; 
+            margin-bottom: 25px; 
+            text-align: center; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            font-weight: 600;
         }
-        .alert-error { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .alert-info { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
+        .alert-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .alert-info { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
 
         .input-group { margin-bottom: 25px; position: relative; }
-        .input-group i.main-icon { position: absolute; left: 18px; top: 43px; color: var(--slate); font-size: 1rem; }
+        .input-group i.main-icon { 
+            position: absolute; 
+            left: 18px; 
+            top: 45px; 
+            color: var(--pk); 
+            font-size: 1rem; 
+        }
         
-        label { display: block; font-size: 0.85rem; font-weight: 400; color: #cbd5e1; margin-bottom: 10px; margin-left: 5px; }
+        label { 
+            display: block; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            color: var(--label); 
+            margin-bottom: 10px; 
+        }
         
-        /* Input สไตล์ Dark พรีเมียม */
         input { 
             width: 100%; 
             padding: 15px 45px 15px 48px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 18px; 
+            border: 2px solid var(--bd); 
+            border-radius: 12px; 
             outline: none; 
             font-size: 1rem;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--tx);
+            background: var(--in);
+            position: relative;
+            z-index: 20;
         }
         input:focus { 
-            border-color: var(--gsb-pink); 
-            background: rgba(235, 0, 139, 0.05);
-            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.15); 
+            border-color: var(--pk); 
+            box-shadow: 0 0 0 4px rgba(235, 0, 139, 0.1); 
         }
 
         .toggle-password { 
-            position: absolute; right: 18px; top: 43px; 
-            cursor: pointer; color: var(--slate); z-index: 10; font-size: 1rem;
+            position: absolute; 
+            right: 18px; 
+            top: 45px; 
+            cursor: pointer; 
+            color: var(--label); 
+            z-index: 30; 
+            font-size: 1rem;
         }
-        .toggle-password:hover { color: #fff; }
 
-        /* ปุ่มเข้าสู่ระบบ สีชมพูเรืองแสง */
         .btn-login { 
             width: 100%; 
-            background: var(--gsb-pink); 
-            color: #fff; 
+            background: var(--pk); 
+            color: #ffffff !important; 
             padding: 16px; 
             border: none; 
-            border-radius: 18px; 
+            border-radius: 12px; 
             font-size: 1.1rem; 
             font-weight: 700; 
             cursor: pointer; 
             margin-top: 10px; 
-            box-shadow: 0 10px 25px rgba(235, 0, 139, 0.3);
+            box-shadow: 0 4px 14px 0 rgba(235, 0, 139, 0.39);
+            transition: 0.2s;
         }
         .btn-login:hover { 
             filter: brightness(1.1);
-            transform: translateY(-3px); 
-            box-shadow: 0 15px 30px rgba(235, 0, 139, 0.4); 
+            transform: translateY(-2px); 
         }
-        .btn-login:active { transform: translateY(0); }
 
         .forgot-link { text-align: right; margin-top: 15px; }
-        .forgot-link a { color: var(--slate); font-size: 0.85rem; text-decoration: none; font-weight: 400; }
-        .forgot-link a:hover { color: #fff; }
+        .forgot-link a { color: var(--label); font-size: 0.85rem; text-decoration: none; font-weight: 600; }
+        .forgot-link a:hover { color: var(--pk); }
 
-        .footer-text { text-align: center; margin-top: 35px; font-size: 0.9rem; color: var(--slate); font-weight: 300; }
-        .footer-text a { color: var(--gsb-pink); text-decoration: none; font-weight: 600; margin-left: 5px; }
-        .footer-text a:hover { text-decoration: underline; }
+        .footer-text { text-align: center; margin-top: 35px; font-size: 0.9rem; color: var(--label); }
+        .footer-text a { color: var(--pk); text-decoration: none; font-weight: 700; margin-left: 5px; }
 
-        /* ปรับปรุงสำหรับมือถือ */
+        .tgl { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            cursor: pointer; 
+            color: var(--pk); 
+            z-index: 1000; 
+            background: var(--cd); 
+            width: 45px; 
+            height: 45px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%; 
+            border: 2px solid var(--bd);
+        }
+
         @media (max-width: 480px) {
-            .login-card { padding: 40px 25px; border-radius: 25px; }
-            .logo h1 { font-size: 1.7rem; }
-            input, .btn-login { height: 55px; }
+            .login-card { padding: 35px 25px; }
         }
     </style>
 </head>
 <body>
+
+<div class="tgl" onclick="setT()">
+    <i class="fa-solid fa-circle-half-stroke"></i>
+</div>
 
 <div class="login-card">
     <div class="logo">
@@ -175,7 +231,14 @@
 </div>
 
 <script>
-    // สคริปต์เดิมของพี่ กุคงไว้ให้ทำงานได้เหมือนเดิมเป๊ะ
+    const setT = () => {
+        const html = document.documentElement;
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+    };
+    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
     const eyeIcon = document.getElementById('eyeIcon');
     const passwordInput = document.getElementById('login-password');
     eyeIcon.addEventListener('click', () => {
