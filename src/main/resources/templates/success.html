@@ -1,9 +1,43 @@
-// ตัวอย่างตอนเปลี่ยนรหัสผ่านสำเร็จ
-model.addAttribute("title", "เปลี่ยนรหัสผ่านสำเร็จ");
-model.addAttribute("message", "รหัสผ่านใหม่ของคุณพร้อมใช้งานแล้ว");
-return "success"; 
-
-// ตัวอย่างตอนลงทะเบียนสำเร็จ
-model.addAttribute("title", "ลงทะเบียนสำเร็จ");
-model.addAttribute("message", "บัญชีของคุณถูกสร้างเรียบร้อยแล้ว กรุณารอการอนุมัติ");
-return "success";
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success | GSB Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --gsb-pink: #eb008b; --bg: #040508; }
+        body { 
+            font-family: 'Sarabun', sans-serif; background-color: var(--bg);
+            background-image: radial-gradient(circle at center, rgba(235, 0, 139, 0.1) 0%, transparent 70%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #fff;
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px);
+            padding: 50px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; width: 90%; max-width: 400px;
+        }
+        .icon { 
+            width: 80px; height: 80px; background: rgba(235, 0, 139, 0.1);
+            color: var(--gsb-pink); border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; font-size: 2.5rem;
+            margin: 0 auto 25px; border: 2px solid var(--gsb-pink);
+        }
+        h2 { margin-bottom: 10px; font-weight: 700; color: white; }
+        p { color: #94a3b8; margin-bottom: 30px; line-height: 1.5; }
+        .btn { 
+            display: block; background: var(--gsb-pink); color: #fff; 
+            padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon"><i class="fa-solid fa-check"></i></div>
+        <h2 th:text="${title}">ดำเนินการสำเร็จ</h2>
+        <p th:text="${message}">ระบบบันทึกข้อมูลเรียบร้อยแล้ว</p>
+        <a th:href="@{/login}" class="btn">ตกลง / กลับหน้าหลัก</a>
+    </div>
+</body>
+</html>
